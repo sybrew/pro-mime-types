@@ -65,6 +65,8 @@ $header_translations = [
 	'safety'    => \__( 'Assumed safety', 'pro-mime-types' ),
 ];
 
+$i18n_assumed_safe = \__( 'This MIME type is considered safe for uploading.', 'pro-mime-types' );
+
 $supported_mime_types = [];
 // Make a new array which we can filter by key.
 foreach ( SUPPORTED_MIME_TYPES as [ $extension_regex, $mime, $danger, $comment, $type ] )
