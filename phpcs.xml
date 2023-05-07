@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<ruleset name="Pro Mime Types">
+	<description>The coding standard used for Pro Mime Types plugin for WordPress.</description>
+
+	<!-- Get it here: https://github.com/theseoframework/wpcs-tsf -->
+	<rule ref="TSF"/>
+
+	<!-- Defined at wpcs-tsf. We cannot override that here... -->
+	<!-- <config name="minimum_supported_wp_version" value="5.3"/> -->
+	<!-- <config name="testVersion" value="7.4-"/> -->
+
+	<rule ref="TSF.Performance.Opcodes">
+		<properties>
+			<property name="userNoopChecks" type="array" value="get_allowed_mime_types_settings,_plugin_init,is_network_mode,_register_or_upgrade_settings,_define_supported_mime_types,_release_upgrade_lock,_set_upgrade_lock,_bind_admin_hook"/>
+		</properties>
+	</rule>
+
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array" value="pro-mime-types,default"/>
+		</properties>
+	</rule>
+
+	<!-- <rule ref="VariableAnalysis.CodeAnalysis.VariableAnalysis">
+		<properties>
+			<property name="validUndefinedVariableNames" type="string" value="this _secret"/>
+		</properties>
+	</rule> -->
+
+	<!-- Exclude minified scripts. -->
+	<exclude-pattern>*.min.js</exclude-pattern>
+	<exclude-pattern>*.min.css</exclude-pattern>
+
+	<!-- Exclude index.php files. They are inert in (our) plugins unless directly included/called. -->
+	<exclude-pattern>index.php</exclude-pattern>
+
+	<!-- Check all PHP files in directory tree by default. -->
+	<arg name="extensions" value="php"/>
+	<file>.</file>
+</ruleset>

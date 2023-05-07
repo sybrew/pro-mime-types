@@ -1,0 +1,224 @@
+<?php
+/**
+ * @package Pro_Mime_Types\Admin
+ */
+
+namespace Pro_Mime_Types\Admin;
+
+\defined( 'Pro_Mime_Types\VERSION' ) or die;
+
+use function \Pro_Mime_Types\is_network_mode;
+
+use const \Pro_Mime_Types\ALLOWED_MIME_TYPES_OPTIONS_NAME;
+
+/**
+ * Pro Mime Types plugin
+ * Copyright (C) 2023 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as published
+ * by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
+ * The admin page hook.
+ *
+ * @since 2.0.0
+ */
+const PAGE_HOOK = 'pro-mime-types';
+
+/**
+ * The save action name.
+ *
+ * @since 2.0.0
+ */
+const SAVE_ACTION = 'pmt_save_settings';
+
+/**
+ * The saved action response name.
+ *
+ * @since 2.0.0
+ */
+const SAVED_RESPONSE = 'pmt_updated';
+
+/**
+ * The save nonce name and action.
+ *
+ * @since 2.0.0
+ */
+const SAVE_NONCE = [
+	'name'   => '_pmt_nonce',
+	'action' => '_pmt_nonce_save_settings',
+];
+
+/**
+ * Binds the plugin on admin page load.
+ *
+ * @since 2.0.0
+ * @access private
+ *
+ * @param string $page The submenu page name.
+ */
+function _bind_admin_hook( $page ) {
+	\add_action( "load-$page", __NAMESPACE__ . '\_init_admin_page' );
+}
+
+/**
+ * Registers the multisite menu.
+ *
+ * @since 2.0.0
+ * @access private
+ */
+function _register_network_admin_menu() {
+	_bind_admin_hook(
+		\add_submenu_page(
+			'settings.php',
+			'Pro Mime Types',
+			'Pro Mime Types',
+			'manage_network',
+			PAGE_HOOK,
+			__NAMESPACE__ . '\_display_admin_page',
+		)
+	);
+}
+
+/**
+ * Registers the single-site menu.
+ *
+ * @since 2.0.0
+ * @access private
+ */
+function _register_admin_menu() {
+	_bind_admin_hook(
+		\add_submenu_page(
+			'options-general.php',
+			'Pro Mime Types',
+			'Pro Mime Types',
+			\is_multisite() ? 'manage_network' : 'manage_options',
+			'pro-mime-types',
+			__NAMESPACE__ . '\_display_admin_page',
+		)
+	);
+}
+
+/**
+ * Initializes all that's necessary for the admin page.
+ *
+ * @since 2.0.0
+ * @access private
+ */
+function _init_admin_page() {
+	\add_filter(
+		'admin_body_class',
+		/**
+		 * Adds a class to the body HTML tag.
+		 *
+		 * Filters the body class string for admin pages and adds our own class for easier styling.
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param string $body_class The body class string.
+		 * @return string The modified body class string.
+		 */
+		fn( $body_class ) => "$body_class pmt-settings ",
+	);
+
+	\add_action(
+		'admin_enqueue_scripts',
+		function() {
+			$dir_url = \plugin_dir_url( \Pro_Mime_Types\PLUGIN_BASE_FILE );
+			$min     = \defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+
+			\wp_enqueue_style(
+				'pmt-admin-styles',
+				"{$dir_url}lib/admin{$min}.css",
+				[ 'dashicons', 'common', 'forms' ],
+				\Pro_Mime_Types\VERSION,
+			);
+			\wp_enqueue_script(
+				'pmt-admin-script',
+				"{$dir_url}lib/admin{$min}.js",
+				[],
+				\Pro_Mime_Types\VERSION,
+				true
+			);
+		}
+	);
+}
+
+/**
+ * Outputs the administrative page.
+ *
+ * @since 2.0.0
+ * @access private
+ */
+function _display_admin_page() {
+	include \Pro_Mime_Types\PLUGIN_DIR_PATH . 'views/admin.php';
+}
+
+/**
+ * Outputs the administrative page tab content.
+ *
+ * @since 2.0.0
+ * @access private
+ *
+ * @param string $current_tab The current admin tab.
+ */
+function _output_tab_content( $current_tab ) {
+	switch ( $current_tab ) {
+		case '':
+			include \Pro_Mime_Types\PLUGIN_DIR_PATH . 'views/tab-options.php';
+			break;
+		case 'allowed-types':
+			include \Pro_Mime_Types\PLUGIN_DIR_PATH . 'views/tab-allowed-types.php';
+			break;
+	}
+}
+
+/**
+ * Processes settings submission, and redirects user back to admin page.
+ *
+ * @since 2.0.0
+ * @access private
+ */
+function _process_settings_submission() {
+
+	\check_admin_referer( SAVE_NONCE['action'], SAVE_NONCE['name'] );
+
+	if ( ! \current_user_can( \is_multisite() ? 'manage_network' : 'manage_options' ) )
+		\wp_die(
+			\esc_html__( 'Sorry, you are not allowed to update Pro Mime Type settings.', 'pro-mime-types' ),
+			403
+		);
+
+	// Filter all non-true values in POST, get all keys, and then comma-separate them.
+	$settings = implode(
+		',',
+		array_keys(
+			array_filter(
+				(array) ( $_POST[ ALLOWED_MIME_TYPES_OPTIONS_NAME ] ?? [] )
+			)
+		)
+	);
+
+	if ( is_network_mode() ) {
+		$result = \get_site_option( ALLOWED_MIME_TYPES_OPTIONS_NAME, $settings ) !== $settings
+			? (int) \update_site_option( ALLOWED_MIME_TYPES_OPTIONS_NAME, $settings )
+			: 2;
+	} else {
+		$result = \get_option( ALLOWED_MIME_TYPES_OPTIONS_NAME, $settings ) !== $settings
+			? (int) \update_option( ALLOWED_MIME_TYPES_OPTIONS_NAME, $settings )
+			: 2;
+	}
+
+	\wp_safe_redirect( \add_query_arg( SAVED_RESPONSE, $result, \wp_get_referer() ) );
+	exit;
+}

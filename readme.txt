@@ -1,41 +1,25 @@
 === Pro Mime Types ===
 Contributors: Cybr
-Tags: mime, mimetypes, types, multisite, single, upload, wpmu, prosites, pro, sites
-Requires at least: 3.1.0
-Tested up to: 4.3.1
-Stable tag: 1.0.7
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Tags: mime, mimetypes, types, multisite, network, upload, attachment, security, images, video, pdf
+Requires at least: 5.3
+Tested up to: 6.2
+Requires PHP: 7.4.0
+Stable tag: 2.0.0
+License: GPLv3
+License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Pro Mime Types allows you to set allowed upload mime types through a nifty network admin menu and considers WPMUdev's Pro Sites!
+Pro Mime Types enables you to allow or block MIME types for media / file / attachment uploads through a nifty (network) admin menu.
 
 == Description ==
 
-= Pro Mime Types =
+Pro Mime Types allows you to enable or disable MIME types uploads.
 
-**This plugin works on both WordPress MultiSite and Single Sites**
+You can also see the list of all active MIME Types on the site or network.
 
-This plugin allows you to:
+- When a MIME Type is allowed: Users allowed to upload files can now do so for that MIME type.
+- When a MIME Type is disallowed: The user gets an error that the file isn't allowed because of security reasons.
 
-* Set allowed Mime types
-* If allowed, also set minimum Pro Sites level (WPMUdev plugin)
-
-Within the network admin menu under Settings you can allow or disallow various mime types.
-You can also see the list of all active Mime Types on the network.
-
-> <strong>About Pro Mime Types</strong><br>
-> This plugin allows you to set available mime types for upload in the Media Library
->
-> When a Mime Type is allowed:
-> Any user can upload the file
->
-> When a Mime Type is disallowed:
-> The user gets an error that the file isn't allowed because of security reasons.
-
-*For the extra Pro Sites functionality you'll need the Pro Sites plugin from WPMUdev, get it here: [Pro Sites by WPMUdev]*
-
-[Pro Sites by WPMUdev]: https://premium.wpmudev.org/project/pro-sites/
-	"Pro Sites"
+For WordPress Multisite networks, enable this plugin in network-mode control MIME types on the entire network.
 
 == Installation ==
 
@@ -47,16 +31,47 @@ You can also see the list of all active Mime Types on the network.
 
 == Changelog ==
 
+= 2.0.0 =
+
+After 8 years without updates (yet still working with the latest version of WordPress), Pro Mime Types got rewritten from the ground up. Now it's written by a senior PHP developer (me), instead of a noob (also me).
+
+* Security: Resolved a security vulnerability (CSRF) due to missing nonces, where a nefarious actor could enable and disable MIME type support after tricking an admin into clicking a rogue link. Props Nguyen Xuan Chien via PatchStack.
+* Added: You can now submit translations for this plugin via WordPress.org.
+* Added: `image/heic`, `image/avif`, `image/webp`, `audio/flac`, `audio/aac`, `audio/ac3`, `audio/aiff`, `application/vnd.ms-cab-compressed`, `application/x-apple-diskimage` are now a supported MIME types.
+* Added: `.jif`, `.jfif`, `.heic`, `.avif`, `.xcf`, `.flac`, `.aac`, `.ac3`, `.aff`, `.aif`, `.aiff`, `.mp1`, `.mp2`, `.mpeg`, `.ogm`, `.vob`, `.cab`, `.img`, `.2mg` `.smi`, `.dmg`, `.md`, and `.xml` are now supported extensions.
+* Added: "Real MIME" detection for image types `image/heic`, `image/avif`, and `image/webp`.
+* Added: This plugin can now be used on a WordPress Multisite network in single-site mode.
+	* However, network administrative capabilities are still required to change MIME type support. Regular site administrators cannot enable MIME type support on a network for your security.
+* Added: You can now filter in custom MIME types via filter `pmt_supported_mime_types`. That filter must be registered before `plugins_loaded`.
+* Added: The plugin options are saved when installing the plugin. This prevents extra database lookups on every request when the options are left as default.
+* Added: Now allows uploading of file types even if WordPress fails to deduct them.
+* Changed: The "allowed MIME types" list now show the actual values recognized by WordPress, instead of inferring from the options set with this plugin.
+* Changed: The plugin translation domain is now `pro-mime-types`, from `promimetypes`.
+* Changed: Now requires WP 5.3 or later, because WP 5.3 added a test for the next requirement.
+* Changed: Now requires PHP 7.4 or later.
+* Changed: The plugin and all its files now uses license GPLv3, from "GPLv2 or later."
+* Improved: All MIME type options are now stored in a single row, comma separated by "extension regex," instead of using 90 rows (one for reach type).
+	* After updating, all options will be migrated. You should not downgrade, or you'll get 90 extraneous settings in your database.
+	* Note: During upgrade, if the plugin operates in single-site mode on a network, then **only** the first site that receives a request will get migrated the options; all other sites will use the default settings. This plugin has too small of a reach to consider this edge case. Moreover, settings weren't always reachable in single-site mode, anyway.
+* Improved: Overall performance by implementing better coding standards.
+* Removed: Pro Sites support and all related settings; that plugin has been abandoned.
+* Removed: Shortcode `superadmin_showmimetypes`.
+* Removed: All old functions, filters, actions, callbacks, and globals.
+* Removed: Support for `.swf` and `.flv` file extensions. Shockwave Flash is long gone.
+* Removed: Support for `.dv` (DeltaVision) and `.sea` (Compact Pro) file sorting in WordPress's Media Library. I couldn't find a valid MIME type.
+* Removed: Support for `.php` (PHP Hypertext Processor) file sorting in WordPress's Media Library. Consider using FTP.
+	* Implementing this via Pro Mime Types would allow uploading of PHP files, which we will refuse implementing.
+
 = 1.0.7 =
-* Fixed: Fatal Error on attachment call by ID on front end.
+* Fixed: Fatal Error on attachment call
 * Confirmed: WP 4.3.1 support
 
 = 1.0.6 =
 * Fixed: Wrong call in ext2type filter
 
 = 1.0.5 =
-* Added: Default mime options (enabled for safe, disabled for the rest) (effective only before the first save has been made)
-* Added: Default Mime Types are directly active on first activation
+* Added: Default MIME options (enabled for safe, disabled for the rest) (effective only before the first save has been made)
+* Added: Default MIME Types are directly active on first activation
 * Added: single-site compatibility
 * Added: Extra option saving sanitation
 * Removed: Pro Sites information on non-multisite installations

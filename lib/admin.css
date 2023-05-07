@@ -1,0 +1,361 @@
+/**
+ * Pro Mime Types plugin
+ * Copyright (C) 2023 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as published
+ * by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
+ * Most of the styles below are repurposed from WordPress's Privacy and Health pages.
+ *
+ * The tooltips are largely sourced from The SEO Framework plugin.
+ */
+
+/* General */
+.pmt-settings #wpcontent,
+.pmt-settings.auto-fold #wpcontent {
+	padding-left: 0;
+}
+
+/* Better position for the WordPress admin notices. */
+.pmt-settings .notice {
+	margin: 12px 20px 25px 22px;
+	max-width: 800px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.pmt-settings .notice~.notice {
+	margin-top: 22px;
+}
+
+/* Emulates .wrap h1 styling */
+.pmt-settings-header h1 {
+	display: inline-block;
+	font-weight: 600;
+	margin: 0 0.8rem 1rem;
+	font-size: 23px;
+	padding: 9px 0 4px;
+	line-height: 1.3;
+}
+
+/* Header */
+.pmt-settings-header {
+	text-align: center;
+	margin: 0 0 1rem;
+	background: #fff;
+	border-bottom: 1px solid #dcdcde;
+}
+
+.pmt-settings-title-section {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	clear: both;
+	padding-top: 8px;
+}
+
+.pmt-settings-tabs-wrapper {
+	display: inline-grid;
+	grid-template-columns: 1fr 1fr;
+}
+
+.pmt-settings-tab {
+	display: block;
+	/* IE 11 */
+	text-decoration: none;
+	color: inherit;
+	padding: 0.5rem 1rem 1rem;
+	margin: 0 1rem;
+	transition: box-shadow 0.5s ease-in-out;
+}
+
+.pmt-settings-tab:focus {
+	color: #1d2327;
+	outline: 1px solid #787c82;
+	box-shadow: none;
+}
+
+.pmt-settings-tab.active {
+	box-shadow: inset 0 -3px #3582c4;
+	font-weight: 600;
+}
+
+/* Body */
+.pmt-settings-body {
+	max-width: 800px;
+	margin: 0 auto;
+}
+
+.pmt-settings-form {
+	word-break: break-word;
+	line-break: anywhere;
+	/* This may harm accessibility, but only for some text) */
+}
+
+.pmt-settings-form th {
+	min-width: 200px;
+	padding: 15px 10px;
+}
+
+.hr-separator {
+	margin-top: 20px;
+	margin-bottom: 15px;
+}
+
+/* Accordions */
+.pmt-settings-accordion {
+	border: 1px solid #c3c4c7;
+}
+
+.pmt-settings-accordion-heading {
+	margin: 0;
+	border-top: 1px solid #c3c4c7;
+	font-size: inherit;
+	line-height: inherit;
+	font-weight: 600;
+	color: inherit;
+}
+
+.pmt-settings-accordion-heading:first-child {
+	border-top: none;
+}
+
+.pmt-settings-accordion-trigger {
+	background: #fff;
+	border: 0;
+	color: #2c3338;
+	cursor: pointer;
+	display: flex;
+	font-weight: 400;
+	margin: 0;
+	padding: 1em 3.5em 1em 1.5em;
+	min-height: 46px;
+	position: relative;
+	text-align: left;
+	width: 100%;
+	align-items: center;
+	justify-content: space-between;
+	-webkit-user-select: auto;
+	user-select: auto;
+}
+
+.pmt-settings-accordion-trigger:hover,
+.pmt-settings-accordion-trigger:active {
+	background: #f6f7f7;
+}
+
+.pmt-settings-accordion-trigger:focus {
+	color: #1d2327;
+	border: none;
+	box-shadow: none;
+	outline-offset: -1px;
+	outline: 2px solid #2271b1;
+	background-color: #f6f7f7;
+}
+
+.pmt-settings-accordion-trigger .title {
+	pointer-events: none;
+	font-weight: 600;
+	flex-grow: 1;
+}
+
+.pmt-settings-accordion-trigger .icon {
+	border: solid #50575e;
+	border-width: 0 2px 2px 0;
+	height: 0.5rem;
+	pointer-events: none;
+	position: absolute;
+	right: 1.5em;
+	top: 50%;
+	transform: translateY(-70%) rotate(45deg);
+	width: 0.5rem;
+}
+
+.pmt-settings-accordion-trigger[aria-expanded="true"] .icon {
+	transform: translateY(-30%) rotate(-135deg)
+}
+
+.pmt-settings-accordion-panel {
+	margin: 0;
+	padding: 1em 1.5em;
+	background: #fff;
+}
+
+.pmt-settings-accordion-panel[hidden] {
+	display: none;
+}
+
+.pmt-settings-accordion-panel a .dashicons {
+	text-decoration: none;
+}
+
+.pmt-warning .dashicons {
+	pointer-events: none;
+}
+
+/* Tooltip */
+.pmt-warning .dashicons-yes-alt {
+	color: #1E7A00;
+}
+
+.pmt-warning .dashicons-flag,
+.pmt-warning .dashicons-warning {
+	color: #FF8800;
+}
+
+.pmt-warning .dashicons-dismiss {
+	color: #FF0000;
+}
+
+[data-pmt-tooltip] {
+	display: inline-block;
+	position: relative;
+	vertical-align: middle;
+}
+
+[data-pmt-tooltip]:not([data-pmt-tooltip=""]) {
+	cursor: help;
+}
+
+.pmt-tooltip {
+	position: absolute;
+	padding: 0;
+	margin: 0;
+	top: 0;
+	left: -.33em;
+	z-index: 900142;
+	text-align: left;
+	pointer-events: none;
+	box-sizing: border-box;
+	display: flex;
+	flex: 1 1 auto;
+	flex-flow: row wrap;
+	justify-content: flex-start;
+	direction: ltr;
+	-webkit-text-size-adjust: none;
+	-moz-text-size-adjust: none;
+	text-size-adjust: none;
+	word-break: break-word;
+	line-break: auto;
+}
+
+.pmt-tooltip-text-wrap {
+	padding: 10px 12px;
+	font-size: 13px;
+	font-weight: 400;
+	line-height: 1.625em;
+	border-radius: 3px;
+	background: #424242;
+	color: #fbf7fd;
+	box-shadow: 0px 0px 2px rgba(0, 0, 0, .6);
+	text-shadow: none;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+	word-break: break-word;
+	white-space: pre-line;
+	display: flex;
+	flex: 1 0 auto;
+	flex-flow: row wrap;
+	justify-content: flex-start;
+	max-width: 200px;
+}
+
+.pmt-tooltip-text br {
+	display: block;
+	width: 100%;
+	content: "\A";
+}
+
+.pmt-tooltip-arrow {
+	position: absolute;
+	bottom: -8px;
+	z-index: 9999999;
+	left: 7px;
+	width: 0;
+	height: 0;
+}
+
+.pmt-tooltip-arrow:before {
+	content: "";
+	border-left: 9px solid transparent;
+	border-right: 9px solid transparent;
+	border-top: 9px solid rgba(0, 0, 0, .25);
+	position: absolute;
+	bottom: 0;
+	left: 0;
+}
+
+.pmt-tooltip-arrow:after {
+	content: "";
+	border-left: 8px solid transparent;
+	border-right: 8px solid transparent;
+	border-top: 8px solid #424242;
+	position: absolute;
+	bottom: 1px;
+	left: 1px;
+}
+
+/* Media queries */
+@media screen and (max-width: 782px) {
+	.pmt-settings-body {
+		margin: 0 12px;
+		width: auto;
+	}
+
+	.pmt-settings .notice {
+		margin: 5px 10px 15px;
+	}
+
+	.pmt-settings .update-nag {
+		margin-right: 10px;
+		margin-left: 10px;
+	}
+
+	.pmt-settings .form-table th {
+		display: none;
+	}
+
+	.pmt-settings .form-table tr {
+		display: grid;
+	}
+
+	.pmt-settings .form-table td {
+		display: grid;
+		grid-template-columns: 1fr 2fr;
+		grid-template-rows: 1fr;
+		gap: 8px;
+		padding: 8px 10px;
+		align-items: center;
+	}
+
+	.pmt-settings .form-table td:before {
+		display: block;
+		content: attr(data-colname);
+		white-space: nowrap;
+		font-weight: 600;
+		align-self: start;
+	}
+
+	.pmt-settings .form-table td[data-select=true] {
+		grid-template-columns: 1fr 1fr 1fr;
+		order: 3;
+	}
+}
+
+@media only screen and (max-width: 1004px) {
+	.pmt-settings-body {
+		margin: 0 22px;
+		width: auto;
+	}
+}
