@@ -1,0 +1,336 @@
+# Copyright (C) 2023 Sybre Waaijer
+# This file is distributed under the GPLv3.
+msgid ""
+msgstr ""
+"Project-Id-Version: Pro Mime Types - Manage file media types 2.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/pro-mime-types\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2023-05-09T01:39:56+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.7.1\n"
+"X-Domain: pro-mime-types\n"
+
+#. Plugin Name of the plugin
+msgid "Pro Mime Types - Manage file media types"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://wordpress.org/plugins/pro-mime-types/"
+msgstr ""
+
+#. Description of the plugin
+msgid "Enable or block MIME types and file extensions for media / file / attachment uploads through a nifty (network) admin menu."
+msgstr ""
+
+#. Author of the plugin
+msgid "Sybre Waaijer"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://cyberwire.nl/"
+msgstr ""
+
+#: inc/admin.php:198
+msgid "Sorry, you are not allowed to update Pro Mime Types settings."
+msgstr ""
+
+#: inc/init.php:266
+msgctxt "file type group"
+msgid "Text"
+msgstr ""
+
+#: inc/init.php:267
+msgid "Manage Text"
+msgstr ""
+
+#. translators: %s: Number of text files.
+#: inc/init.php:269
+msgid "Text <span class=\"count\">(%s)</span>"
+msgid_plural "Text <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/init.php:286
+msgctxt "file type group"
+msgid "Code"
+msgstr ""
+
+#: inc/init.php:287
+msgid "Manage Code"
+msgstr ""
+
+#. translators: %s: Number of code files.
+#: inc/init.php:289
+msgid "Code <span class=\"count\">(%s)</span>"
+msgid_plural "Code <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/init.php:296
+msgctxt "file type group"
+msgid "Miscellaneous"
+msgstr ""
+
+#: inc/init.php:297
+msgid "Manage Miscellaneous"
+msgstr ""
+
+#. translators: %s: Number of miscellaneous files.
+#: inc/init.php:299
+msgid "Miscellaneous <span class=\"count\">(%s)</span>"
+msgid_plural "Miscellaneous <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#: promimetypes.php:242
+#: promimetypes.php:243
+#: promimetypes.php:245
+#: promimetypes.php:247
+#: promimetypes.php:249
+#: promimetypes.php:255
+#: promimetypes.php:260
+#: promimetypes.php:261
+#: promimetypes.php:262
+#: promimetypes.php:263
+#: promimetypes.php:264
+#: promimetypes.php:265
+#: promimetypes.php:267
+#: promimetypes.php:271
+#: promimetypes.php:272
+#: promimetypes.php:273
+#: promimetypes.php:274
+#: promimetypes.php:276
+#: promimetypes.php:277
+#: promimetypes.php:279
+#: promimetypes.php:281
+#: promimetypes.php:313
+#: promimetypes.php:314
+#: promimetypes.php:315
+msgid "Can contain macros which office software may execute."
+msgstr ""
+
+#: promimetypes.php:244
+#: promimetypes.php:246
+#: promimetypes.php:266
+#: promimetypes.php:268
+#: promimetypes.php:275
+#: promimetypes.php:278
+#: promimetypes.php:280
+#: promimetypes.php:282
+#: promimetypes.php:304
+#: promimetypes.php:307
+#: promimetypes.php:316
+msgid "XML file formats can be executed by the browser when interpreted as HTML."
+msgstr ""
+
+#: promimetypes.php:250
+msgid "Can exploit vulnerabilities when opened in browsers."
+msgstr ""
+
+#: promimetypes.php:294
+#: promimetypes.php:295
+#: promimetypes.php:297
+#: promimetypes.php:298
+#: promimetypes.php:299
+#: promimetypes.php:300
+msgid "Compressed file format, can contain unwanted stuff."
+msgstr ""
+
+#: promimetypes.php:296
+msgid "Compressed file format, can contain unwanted stuff. Executes in browser."
+msgstr ""
+
+#: promimetypes.php:303
+msgid "CSS can import external resources in the browser."
+msgstr ""
+
+#: promimetypes.php:305
+msgid "Can run in iframes through shortcodes. Can import javascript. Can import CSS."
+msgstr ""
+
+#: promimetypes.php:306
+msgid "Can execute code in browser."
+msgstr ""
+
+#: promimetypes.php:311
+msgid "Can be executed by some servers."
+msgstr ""
+
+#: promimetypes.php:312
+msgid "Can install unwanted software."
+msgstr ""
+
+#: views/admin.php:46
+#: views/admin.php:64
+msgctxt "Tab title"
+msgid "Options"
+msgstr ""
+
+#: views/admin.php:50
+#: views/admin.php:68
+msgctxt "Tab title"
+msgid "Allowed Types"
+msgstr ""
+
+#: views/admin.php:106
+msgid "Pro Mime Types settings require JavaScript."
+msgstr ""
+
+#: views/admin.php:115
+msgid "Settings failed to save."
+msgstr ""
+
+#: views/admin.php:122
+msgid "Settings saved."
+msgstr ""
+
+#: views/admin.php:129
+msgid "No settings were changed."
+msgstr ""
+
+#: views/tab-allowed-types.php:40
+msgid "Currently allowed MIME types"
+msgstr ""
+
+#: views/tab-allowed-types.php:43
+msgid "Another plugin or theme may influence MIME type support. In the lists below you can inspect if this is happening."
+msgstr ""
+
+#: views/tab-allowed-types.php:47
+msgid "The assumed safety listed considers how likely a file can be used in nefarious ways."
+msgstr ""
+
+#: views/tab-allowed-types.php:63
+#: views/tab-options.php:100
+msgid "File Extensions"
+msgstr ""
+
+#: views/tab-allowed-types.php:64
+#: views/tab-options.php:101
+msgid "MIME type"
+msgstr ""
+
+#: views/tab-allowed-types.php:65
+msgid "Assumed safety"
+msgstr ""
+
+#: views/tab-allowed-types.php:68
+#: views/tab-options.php:107
+msgid "This MIME type is considered safe for uploading."
+msgstr ""
+
+#: views/tab-allowed-types.php:80
+msgid "Allowed via Pro Mime Types"
+msgstr ""
+
+#: views/tab-allowed-types.php:93
+#: views/tab-allowed-types.php:167
+msgid "No allowed MIME types found."
+msgstr ""
+
+#. translators: %s = File extension
+#: views/tab-allowed-types.php:108
+msgid "Removed support: %s"
+msgstr ""
+
+#: views/tab-allowed-types.php:111
+msgid "Unregistered MIME type!"
+msgstr ""
+
+#: views/tab-allowed-types.php:154
+msgid "Allowed via other software"
+msgstr ""
+
+#. translators: %s = File extension
+#: views/tab-allowed-types.php:182
+msgid "Unregistered: %s"
+msgstr ""
+
+#: views/tab-allowed-types.php:185
+msgid "Unregistered MIME type."
+msgstr ""
+
+#: views/tab-options.php:43
+msgid "MIME Type Options"
+msgstr ""
+
+#: views/tab-options.php:46
+msgid "The options below will allow or block file types for upload within your WordPress installation."
+msgstr ""
+
+#: views/tab-options.php:49
+msgid "These options affect all users on all sites of this network."
+msgstr ""
+
+#: views/tab-options.php:50
+msgid "These options affect all users of this site."
+msgstr ""
+
+#: views/tab-options.php:53
+msgid "These options won't affect user upload permissions, only the permitted file extensions and MIME types for those who may already upload."
+msgstr ""
+
+#: views/tab-options.php:55
+msgid "Other plugins and themes may still override these options."
+msgstr ""
+
+#: views/tab-options.php:71
+msgid "Image file formats"
+msgstr ""
+
+#: views/tab-options.php:72
+msgid "Audio file formats"
+msgstr ""
+
+#: views/tab-options.php:73
+msgid "Video file formats"
+msgstr ""
+
+#: views/tab-options.php:74
+msgid "Document file formats"
+msgstr ""
+
+#: views/tab-options.php:75
+msgid "Spreadsheet file formats"
+msgstr ""
+
+#: views/tab-options.php:76
+msgid "Interactive file formats"
+msgstr ""
+
+#: views/tab-options.php:77
+msgid "Text file formats"
+msgstr ""
+
+#: views/tab-options.php:78
+msgid "Archive file formats"
+msgstr ""
+
+#: views/tab-options.php:79
+msgid "Code file formats"
+msgstr ""
+
+#: views/tab-options.php:80
+msgid "Miscellaneous file formats"
+msgstr ""
+
+#: views/tab-options.php:81
+msgid "Other file formats"
+msgstr ""
+
+#: views/tab-options.php:99
+msgctxt "Table header: Allow file uploading"
+msgid "Upload"
+msgstr ""
+
+#: views/tab-options.php:159
+msgid "Allow"
+msgstr ""
+
+#: views/tab-options.php:162
+msgid "Disallow"
+msgstr ""
