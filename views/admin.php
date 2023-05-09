@@ -19,7 +19,7 @@ use const \Pro_Mime_Types\{
 
 /**
  * Pro Mime Types plugin
- * Copyright (C) 2023 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -47,7 +47,7 @@ if ( is_network_mode() ) {
 				'link'  => \network_admin_url( 'settings.php?page=' . PAGE_HOOK ),
 			],
 			'allowed-types' => [
-				'title' => \_x( 'Allowed Media Types', 'Tab title', 'pro-mime-types' ),
+				'title' => \_x( 'Allowed Types', 'Tab title', 'pro-mime-types' ),
 				'link'  => \network_admin_url( 'settings.php?page=' . PAGE_HOOK . '&tab=allowed-types' ),
 			],
 		],
@@ -103,7 +103,7 @@ $current_tab = isset( $_GET['tab'], $tabs[ $_GET['tab'] ] ) ? $_GET['tab'] : '';
 <hr class=wp-header-end>
 
 <div class="notice notice-error hide-if-js inline">
-	<p><?= \esc_html__( 'Pro Mime Type settings require JavaScript.', 'pro-mime-types' ); ?></p>
+	<p><?= \esc_html__( 'Pro Mime Types settings require JavaScript.', 'pro-mime-types' ); ?></p>
 </div>
 
 <?php

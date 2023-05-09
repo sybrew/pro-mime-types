@@ -1,6 +1,15 @@
 <?php
 /**
- * Plugin Name: Pro MIME Types - Manage file media types
+ * Pro Mime Types
+ *
+ * @package   Pro_Mime_Types
+ * @author    Sybre Waaijer
+ * @copyright 2023 CyberWire B.V. (https://cyberwire.nl/)
+ * @license   GPL-3.0
+ * @link      https://github.com/sybrew/pro-mime-types
+ *
+ * @wordpress-plugin
+ * Plugin Name: Pro Mime Types - Manage file media types
  * Plugin URI: https://wordpress.org/plugins/pro-mime-types/
  * Description: Pro Mime Types enables you to allow or block MIME types for media / file / attachment uploads through a nifty (network) admin menu.
  * Version: 2.0.0
@@ -11,8 +20,6 @@
  * Domain Path: /language
  * Requires at least: 5.3
  * Requires PHP: 7.4.0
- *
- * @package Pro_Mime_Types
  */
 
 namespace Pro_Mime_Types;
@@ -21,7 +28,7 @@ namespace Pro_Mime_Types;
 
 /**
  * Pro Mime Types plugin
- * Copyright (C) 2015 - 2023 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2015 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -85,22 +92,29 @@ const ALLOWED_MIME_TYPES_OPTIONS_NAME = 'pro_mime_types_settings';
  */
 function _plugin_init() {
 
-	if ( ! \get_option( ALLOWED_MIME_TYPES_OPTIONS_NAME ) ) {
+	// Define late to allow plugin developers add filters.
+	_define_supported_mime_types();
+
+	if ( ! get_allowed_mime_types_settings() ) {
 		require PLUGIN_DIR_PATH . 'inc/upgrade.php';
 
 		// If upgrade/registration failed, halt further execution of plugin.
 		if ( ! Upgrade\_register_or_upgrade_settings() ) return;
 	}
 
-	_define_supported_mime_types();
-
 	require PLUGIN_DIR_PATH . 'inc/init.php';
 
 	\add_filter( 'mime_types', 'Pro_Mime_Types\Main\_register_mime_types' );
-	\add_filter( 'upload_mimes', 'Pro_Mime_Types\Main\_register_upload_mimes', 10 ); // Override at default.
-	\add_filter( 'getimagesize_mimes_to_exts', 'Pro_Mime_Types\Main\_register_imagesize_extensions' );
-	\add_filter( 'ext2type', 'Pro_Mime_Types\Main\_register_ext2type', 10 ); // Override at default.
-	\add_filter( 'wp_check_filetype_and_ext', 'Pro_Mime_Types\Main\_allow_plaintext_filetype_and_ext', 10, 5 ); // Override at default.
+	\add_filter( 'upload_mimes', 'Pro_Mime_Types\Main\_register_allowed_upload_mimes' ); // Override at default.
+	\add_filter( 'ext2type', 'Pro_Mime_Types\Main\_register_ext2type' ); // Override at default.
+
+	\add_filter( 'getimagesize_mimes_to_exts', 'Pro_Mime_Types\Main\_register_all_imagesize_extensions' ); // Override at default.
+	\add_filter( 'wp_video_extensions', 'Pro_Mime_Types\Main\_register_all_video_extensions' ); // Override at default.
+	\add_filter( 'wp_audio_extensions', 'Pro_Mime_Types\Main\_register_all_audio_extensions' ); // Override at default.
+
+	\add_filter( 'wp_check_filetype_and_ext', 'Pro_Mime_Types\Main\_allow_real_filetype_and_ext', 10, 5 ); // Override at default.
+
+	\add_filter( 'post_mime_types', 'Pro_Mime_Types\Main\_register_post_mime_types' ); // Override at default.
 
 	// Stop init here, all calls below are admin-only stuff.
 	if ( ! \is_admin() ) return;
@@ -172,20 +186,20 @@ function _define_supported_mime_types() {
 		 * @since 2.0.0
 		 * @param array['extension_regex','mime','danger','comment','type'] $mime_types : {
 		 *     'extension_regex' => string of pipe separated extension names
-		 *     'mime'            => exact mime type
+		 *     'mime'            => exact mime type as recognized by PHP's fileinfo extension.
 		 *     'danger'          => On a scale of 0-3, see const Pro_Mime_Types\MIME_DANGER_LEVEL.
 		 *     'comment'         => string of reason why it is considered not safe.
-		 *     'type'            => string of
+		 *     'type'            => string of file type as recognized by WordPress's file sorter (or custom like 'misc/other').
 		 * }
 		 */
 		\apply_filters(
 			'pmt_supported_mime_types',
 			[
 				// Image formats.
-				[ 'avif', 'image/avif', MIME_DANGER_LEVEL['safe'], '', 'image' ],
+				// [ 'avif', 'image/avif', MIME_DANGER_LEVEL['safe'], '', 'image' ], // Causes corruption. Let's figure that out later.
 				[ 'bmp', 'image/bmp', MIME_DANGER_LEVEL['safe'], '', 'image' ],
 				[ 'gif', 'image/gif', MIME_DANGER_LEVEL['safe'], '', 'image' ],
-				[ 'heic', 'image/heic', MIME_DANGER_LEVEL['safe'], '', 'image' ],
+				[ 'heic|heif', 'image/heic', MIME_DANGER_LEVEL['safe'], '', 'image' ], // heic is image/heif, heif is image/heic. :D
 				[ 'ico', 'image/x-icon', MIME_DANGER_LEVEL['safe'], '', 'image' ],
 				[ 'jpg|jpeg|jpe|jif|jfif', 'image/jpeg', MIME_DANGER_LEVEL['safe'], '', 'image' ],
 				[ 'png', 'image/png', MIME_DANGER_LEVEL['safe'], '', 'image' ],
@@ -235,6 +249,7 @@ function _define_supported_mime_types() {
 				[ 'pages', 'application/vnd.apple.pages', MIME_DANGER_LEVEL['low-risk'], \__( 'Can contain macros which office software may execute.', 'pro-mime-types' ), 'document' ],
 				[ 'pdf', 'application/pdf', MIME_DANGER_LEVEL['low-risk'], \__( 'Can exploit vulnerabilities when opened in browsers.', 'pro-mime-types' ), 'document' ],
 				[ 'psd', 'image/vnd.adobe.photoshop', MIME_DANGER_LEVEL['safe'], '', 'document' ],
+				[ 'ai', 'application/postscript', MIME_DANGER_LEVEL['safe'], '', 'document' ],
 				[ 'rtf', 'application/rtf', MIME_DANGER_LEVEL['safe'], '', 'document' ],
 				[ 'wri', 'application/vnd.ms-write', MIME_DANGER_LEVEL['safe'], '', 'document' ],
 				[ 'wp|wpd', 'application/wordperfect', MIME_DANGER_LEVEL['low-risk'], \__( 'Can contain macros which office software may execute.', 'pro-mime-types' ), 'document' ],
@@ -285,7 +300,7 @@ function _define_supported_mime_types() {
 				[ 'zip', 'application/zip', MIME_DANGER_LEVEL['high-risk'], \__( 'Compressed file format, can contain unwanted stuff.', 'pro-mime-types' ), 'archive' ],
 
 				// Code formats.
-				[ 'css', 'text/css', MIME_DANGER_LEVEL['dangerous'], \__( '@import and behaviour: rules in CSS can be executed in browser.', 'pro-mime-types' ), 'code' ],
+				[ 'css', 'text/css', MIME_DANGER_LEVEL['high-risk'], \__( 'CSS can import external resources in the browser.', 'pro-mime-types' ), 'code' ],
 				[ 'dfxp', 'application/ttaf+xml', MIME_DANGER_LEVEL['low-risk'], \__( 'XML file formats can be executed by the browser when interpreted as HTML.', 'pro-mime-types' ), 'code' ],
 				[ 'htm|html', 'text/html', MIME_DANGER_LEVEL['dangerous'], \__( 'Can run in iframes through shortcodes. Can import javascript. Can import CSS.', 'pro-mime-types' ), 'code' ],
 				[ 'js', 'application/javascript', MIME_DANGER_LEVEL['dangerous'], \__( 'Can execute code in browser.', 'pro-mime-types' ), 'code' ],

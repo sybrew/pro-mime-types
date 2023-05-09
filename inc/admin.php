@@ -13,7 +13,7 @@ use const \Pro_Mime_Types\ALLOWED_MIME_TYPES_OPTIONS_NAME;
 
 /**
  * Pro Mime Types plugin
- * Copyright (C) 2023 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -195,7 +195,7 @@ function _process_settings_submission() {
 
 	if ( ! \current_user_can( \is_multisite() ? 'manage_network' : 'manage_options' ) )
 		\wp_die(
-			\esc_html__( 'Sorry, you are not allowed to update Pro Mime Type settings.', 'pro-mime-types' ),
+			\esc_html__( 'Sorry, you are not allowed to update Pro Mime Types settings.', 'pro-mime-types' ),
 			403
 		);
 

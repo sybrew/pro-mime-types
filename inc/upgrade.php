@@ -12,11 +12,12 @@ use function \Pro_Mime_Types\is_network_mode;
 use const \Pro_Mime_Types\{
 	MIME_DANGER_LEVEL,
 	ALLOWED_MIME_TYPES_OPTIONS_NAME,
+	SUPPORTED_MIME_TYPES,
 };
 
 /**
  * Pro Mime Types plugin
- * Copyright (C) 2023 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -59,8 +60,14 @@ function _register_or_upgrade_settings() {
 	if ( 0 !== $ini_max_execution_time )
 		set_time_limit( max( $ini_max_execution_time, $timeout ) );
 
+	// Delete options; $success may in an unpredicted event return false otherwise.
+	\delete_option( ALLOWED_MIME_TYPES_OPTIONS_NAME );
+	\delete_site_option( ALLOWED_MIME_TYPES_OPTIONS_NAME );
+
 	\wp_cache_flush();
 	\wp_cache_delete( 'alloptions', 'options' );
+
+	$supported_extensions = [];
 
 	if ( \is_multisite() ) {
 		$old_results = $wpdb->get_results(
@@ -71,13 +78,11 @@ function _register_or_upgrade_settings() {
 		);
 
 		if ( $old_results ) {
-			$supported_mime_types = [];
-
 			foreach ( $old_results as $row ) {
 				switch ( $row->meta_value ) { // Either 2 or 1; disallowed and allowed.
 					case 1: // Allowed.
-						$supported_mime_types[] = str_replace( 'pmt_mime_type_', '', $row->meta_key );
-						break;
+						$supported_extensions[] = str_replace( 'pmt_mime_type_', '', $row->meta_key );
+						// Ignore all other settings.
 				}
 			}
 		}
@@ -90,38 +95,48 @@ function _register_or_upgrade_settings() {
 		);
 
 		if ( $old_results ) {
-			$supported_mime_types = [];
-
 			foreach ( $old_results as $row ) {
 				switch ( $row->option_value ) { // Either 2 or 1; disallowed and allowed.
 					case 1: // Allowed.
-						$supported_mime_types[] = str_replace( 'pmt_mime_type_', '', $row->option_name );
-						break;
-					// Ignore everything else.
+						$supported_extensions[] = str_replace( 'pmt_mime_type_', '', $row->option_name );
+						// Ignore all other settings.
 				}
 			}
 		}
 	}
 
-	if ( empty( $supported_mime_types ) ) {
+	if ( ! $old_results ) {
 		// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- unpack list.
 		foreach ( SUPPORTED_MIME_TYPES as [ $extension_regex, $mime, $danger ] )
 			if ( MIME_DANGER_LEVEL['safe'] === $danger )
-				$supported_mime_types[] = $extension_regex;
+				$supported_extensions[] = $extension_regex;
+	} else {
+		// Migrate from old extension regex to new extension regex.
+		foreach (
+			[
+				'jpg|jpeg|jpe' => 'jpg|jpeg|jpe|jif|jfif',
+				'mp3|m4a|m4b'  => 'mp1|mp2|mp3|m3a|m4a|m4b',
+				'ogv'          => 'ogv|ogm',
+			]
+			as $old => $new
+		) {
+			if ( in_array( $old, $supported_extensions, true ) ) {
+				// It'd be faster if we'd collect the "$old", and then perform an array_diff... oh well.
+				$supported_extensions   = array_diff( $supported_extensions, [ $old ] );
+				$supported_extensions[] = $new;
+			}
+		}
 	}
 
 	// SWF and FLV are long gone. Let's stop recognizing it.
-	$supported_mime_types = array_diff( $supported_mime_types, [ 'swf', 'flv' ] );
-
-	// Delete options; $success may in an unpredicted event return false otherwise.
-	\delete_option( ALLOWED_MIME_TYPES_OPTIONS_NAME );
-	\delete_site_option( ALLOWED_MIME_TYPES_OPTIONS_NAME );
+	$supported_extensions = array_diff( $supported_extensions, [ 'swf', 'flv' ] );
 
 	// Migrate;
 	$success = is_network_mode()
-		? \update_site_option( ALLOWED_MIME_TYPES_OPTIONS_NAME, implode( ',', $supported_mime_types ) )
-		: \update_option( ALLOWED_MIME_TYPES_OPTIONS_NAME, implode( ',', $supported_mime_types ) );
+		? \update_site_option( ALLOWED_MIME_TYPES_OPTIONS_NAME, implode( ',', $supported_extensions ) )
+		: \update_option( ALLOWED_MIME_TYPES_OPTIONS_NAME, implode( ',', $supported_extensions ) );
 
+	// Try again later. Don't warn user -- the plugin will simply be unavailable.
 	if ( ! $success ) return false;
 
 	// Delete old options, if any.

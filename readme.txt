@@ -1,5 +1,6 @@
 === Pro Mime Types ===
 Contributors: Cybr
+Donate link: https://github.com/sponsors/sybrew
 Tags: mime, mimetypes, types, multisite, network, upload, attachment, security, images, video, pdf
 Requires at least: 5.3
 Tested up to: 6.2
@@ -12,14 +13,27 @@ Pro Mime Types enables you to allow or block MIME types for media / file / attac
 
 == Description ==
 
-Pro Mime Types allows you to enable or disable MIME types uploads.
+Pro Mime Types allows you to enable or disable many MIME types uploads.
 
-You can also see the list of all active MIME Types on the site or network.
+You can also see the list of all active MIME types on the site or network.
 
-- When a MIME Type is allowed: Users allowed to upload files can now do so for that MIME type.
-- When a MIME Type is disallowed: The user gets an error that the file isn't allowed because of security reasons.
+- When a MIME type is allowed: Users allowed to upload files can now do so for that MIME type.
+- When a MIME type is disallowed: The user gets an error that the file isn't allowed because of security reasons.
 
 For WordPress Multisite networks, enable this plugin in network-mode control MIME types on the entire network.
+
+= Features =
+
+* Control many MIME types for upload via a modern interface.
+* All assumed safe MIME types are enabled by default.
+* All assumed unsafe MIME types have a tooltip with an explanation. Hover over the big colored icon.
+* View all allowed MIME types for the site (also those enabled by other plugins).
+* Sort through text, code, and miscellaneous file types via the Media Library,
+* Sorting through images, audio, video, documents, spreadsheets, and archives now recognize more types.
+* Multisite: Can run in single-site mode, where every subsite has custom allowed MIME types. These can only be assigned by the network administrator.
+* Multisite: Can run in network-mode, where all sites are allowed the same MIME types. This can be configured via the network administration UI.
+
+Note: PHP file type support cannot be enabled to protect you.
 
 == Installation ==
 
@@ -29,6 +43,14 @@ For WordPress Multisite networks, enable this plugin in network-mode control MIM
 1. If you're on a Single Site installation, you can set up the default options within the Settings menu.
 1. That's it! Enjoy!
 
+== Frequently Asked Questions ==
+
+= I enabled an extension but I couldn't upload it =
+
+Not all PHP installations recognize MIME types the same way. This makes it difficult for us to test every file type.
+
+If you find an issue, please open a [support topic](https://wordpress.org/support/plugin/pro-mime-types/#new-topic-0) or [GitHub issue](https://github.com/sybrew/pro-mime-types/issues/new) and detail your website's [PHP version](https://wordpress.org/documentation/article/site-health-screen/#server) and image extension so we can start investigating the MIME type.
+
 == Changelog ==
 
 = 2.0.0 =
@@ -37,14 +59,15 @@ After 8 years without updates (yet still working with the latest version of Word
 
 * Security: Resolved a security vulnerability (CSRF) due to missing nonces, where a nefarious actor could enable and disable MIME type support after tricking an admin into clicking a rogue link. Props Nguyen Xuan Chien via PatchStack.
 * Added: You can now submit translations for this plugin via WordPress.org.
-* Added: `image/heic`, `image/avif`, `image/webp`, `audio/flac`, `audio/aac`, `audio/ac3`, `audio/aiff`, `application/vnd.ms-cab-compressed`, `application/x-apple-diskimage` are now a supported MIME types.
-* Added: `.jif`, `.jfif`, `.heic`, `.avif`, `.xcf`, `.flac`, `.aac`, `.ac3`, `.aff`, `.aif`, `.aiff`, `.mp1`, `.mp2`, `.mpeg`, `.ogm`, `.vob`, `.cab`, `.img`, `.2mg` `.smi`, `.dmg`, `.md`, and `.xml` are now supported extensions.
-* Added: "Real MIME" detection for image types `image/heic`, `image/avif`, and `image/webp`.
+* Added: `application/postscript`, `application/vnd.ms-cab-compressed`, `application/x-apple-diskimage`, `audio/aac`, `audio/ac3`, `audio/aiff`, `audio/flac`, `image/heic`, and `image/webp` are now a supported MIME types.
+* Added: `.2mg`, `.aac`, `.ac3`, `.aff`, `.ai`, `.aif`, `.aiff`, `.cab`, `.dmg`, `.flac`, `.heic`, `.img`, `.jfif`, `.jif`, `.md`, `.mp1`, `.mp2`, `.mpeg`, `.ogm`, `.smi`, `.vob`, `.xcf`, and `.xml` are now supported extensions.
+* Added: "Real MIME" detection for image types `image/heic`, and `image/webp`.
 * Added: This plugin can now be used on a WordPress Multisite network in single-site mode.
 	* However, network administrative capabilities are still required to change MIME type support. Regular site administrators cannot enable MIME type support on a network for your security.
 * Added: You can now filter in custom MIME types via filter `pmt_supported_mime_types`. That filter must be registered before `plugins_loaded`.
 * Added: The plugin options are saved when installing the plugin. This prevents extra database lookups on every request when the options are left as default.
 * Added: Now allows uploading of file types even if WordPress fails to deduct them.
+* Added: You can now sort through text, code, and miscellaneous file types in the Media Library.
 * Changed: The "allowed MIME types" list now show the actual values recognized by WordPress, instead of inferring from the options set with this plugin.
 * Changed: The plugin translation domain is now `pro-mime-types`, from `promimetypes`.
 * Changed: Now requires WP 5.3 or later, because WP 5.3 added a test for the next requirement.

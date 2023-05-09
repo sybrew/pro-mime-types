@@ -13,7 +13,7 @@ use function \Pro_Mime_Types\get_allowed_mime_types_settings;
 
 /**
  * Pro Mime Types plugin
- * Copyright (C) 2023 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -63,7 +63,7 @@ function _register_mime_types( $mime_types ) {
  * @param array $t Mime types keyed by the file extension regex corresponding to those types.
  * @return array The MIME types.
  */
-function _register_upload_mimes( $t = [] ) {
+function _register_allowed_upload_mimes( $t = [] ) {
 
 	// Reset.
 	$t = [];
@@ -94,10 +94,13 @@ function _register_upload_mimes( $t = [] ) {
  * @param array $mime_to_ext Array of image mime types and their matching extensions.
  * @return array
  */
-function _register_imagesize_extensions( $mime_to_ext ) {
+function _register_all_imagesize_extensions( $mime_to_ext ) {
+
+	// reset
+	$mime_to_ext = [];
 
 	// Gets all types of 'image':
-	$mimes = array_intersect_key(
+	$image_mimes = array_intersect_key(
 		// This creates [ 'jpg|jpeg|jpe' => 'image/jpeg' ], aka [ extension_regex => mime ];
 		array_column( SUPPORTED_MIME_TYPES, 1, 0 ),
 		array_intersect(
@@ -107,18 +110,68 @@ function _register_imagesize_extensions( $mime_to_ext ) {
 		)
 	);
 
-	foreach (
-		explode(
-			',',
-			get_allowed_mime_types_settings()
-		)
-		as $extension_regex
-	) {
-		if ( isset( $mimes[ $extension_regex ] ) )
-			$mime_to_ext[ $mimes[ $extension_regex ] ] = strtok( $extension_regex, '|' );
-	}
+	foreach ( $image_mimes as $extension_regex => $mime )
+		$mime_to_ext[ $mime ] = strtok( $extension_regex, '|' );
 
 	return $mime_to_ext;
+}
+
+/**
+ * Registers extra types for WordPress to recognize handling video files.
+ *
+ * @since 2.0.0
+ * @access private
+ *
+ * @param string[] $extensions An array of supported video formats. Defaults are
+ *                             'mp4', 'm4v', 'webm', 'ogv', 'flv'.
+ * @return array
+ */
+function _register_all_video_extensions( $extensions ) {
+
+	// Reset.
+	$extensions = [];
+
+	// Gets all types of 'video':
+	$video_mimes = array_intersect(
+		// This creates [ 'jpg|jpeg|jpe' => 'image' ], aka [ extension_regex => type ];
+		array_column( SUPPORTED_MIME_TYPES, 4, 0 ),
+		[ 'video' ]
+	);
+
+	foreach ( $video_mimes as $extension_regex => $type )
+		foreach ( explode( '|', $extension_regex ) as $extension )
+			$extensions[] = $extension;
+
+	return $extensions;
+}
+
+/**
+ * Registers extra types for WordPress to recognize handling audio files.
+ *
+ * @since 2.0.0
+ * @access private
+ *
+ * @param array $extensions An array of supported audio formats. Defaults are
+ *                          'mp3', 'ogg', 'flac', 'm4a', 'wav'.
+ * @return array
+ */
+function _register_all_audio_extensions( $extensions ) {
+
+	// Reset.
+	$extensions = [];
+
+	// Gets all types of 'video':
+	$audio_mimes = array_intersect(
+		// This creates [ 'jpg|jpeg|jpe' => 'image' ], aka [ extension_regex => type ];
+		array_column( SUPPORTED_MIME_TYPES, 4, 0 ),
+		[ 'audio' ]
+	);
+
+	foreach ( $audio_mimes as $extension_regex => $type )
+		foreach ( explode( '|', $extension_regex ) as $extension )
+			$extensions[] = $extension;
+
+	return $extensions;
 }
 
 /**
@@ -146,10 +199,148 @@ function _register_ext2type( $ext2type ) {
 }
 
 /**
+ * Registers extra types for WordPress to filter in the media library.
+ *
+ * @since 2.0.0
+ * @access private
+ * @see get_post_mime_types
+ *
+ * @param array $post_mime_types Default list of post mime types.
+ * @return array
+ */
+function _register_post_mime_types( $post_mime_types ) {
+
+	// Reset.
+	$post_mime_types = [
+		'image'       => [
+			\__( 'Images', 'default' ),
+			\__( 'Manage Images', 'default' ),
+			/* translators: %s: Number of images. */
+			\_n_noop(
+				'Image <span class="count">(%s)</span>',
+				'Images <span class="count">(%s)</span>',
+				'default'
+			),
+		],
+		'audio'       => [
+			\_x( 'Audio', 'file type group', 'default' ),
+			\__( 'Manage Audio', 'default' ),
+			/* translators: %s: Number of audio files. */
+			\_n_noop(
+				'Audio <span class="count">(%s)</span>',
+				'Audio <span class="count">(%s)</span>',
+				'default'
+			),
+		],
+		'video'       => [
+			\_x( 'Video', 'file type group', 'default' ),
+			\__( 'Manage Video', 'default' ),
+			/* translators: %s: Number of video files. */
+			\_n_noop(
+				'Video <span class="count">(%s)</span>',
+				'Video <span class="count">(%s)</span>',
+				'default'
+			),
+		],
+		'document'    => [
+			\__( 'Documents', 'default' ),
+			\__( 'Manage Documents', 'default' ),
+			/* translators: %s: Number of documents. */
+			\_n_noop(
+				'Document <span class="count">(%s)</span>',
+				'Documents <span class="count">(%s)</span>',
+				'default'
+			),
+		],
+		'spreadsheet' => [
+			\__( 'Spreadsheets', 'default' ),
+			\__( 'Manage Spreadsheets', 'default' ),
+			/* translators: %s: Number of spreadsheets. */
+			\_n_noop(
+				'Spreadsheet <span class="count">(%s)</span>',
+				'Spreadsheets <span class="count">(%s)</span>',
+				'default'
+			),
+		],
+		'text'        => [
+			\_x( 'Text', 'file type group', 'pro-mime-types' ),
+			\__( 'Manage Text', 'pro-mime-types' ),
+			/* translators: %s: Number of text files. */
+			\_n_noop(
+				'Text <span class="count">(%s)</span>',
+				'Text <span class="count">(%s)</span>',
+				'pro-mime-types'
+			),
+		],
+		'archive'     => [
+			\_x( 'Archives', 'file type group', 'default' ),
+			\__( 'Manage Archives', 'default' ),
+			/* translators: %s: Number of archives. */
+			\_n_noop(
+				'Archive <span class="count">(%s)</span>',
+				'Archives <span class="count">(%s)</span>',
+				'default'
+			),
+		],
+		'code'        => [
+			\_x( 'Code', 'file type group', 'pro-mime-types' ),
+			\__( 'Manage Code', 'pro-mime-types' ),
+			/* translators: %s: Number of code files. */
+			\_n_noop(
+				'Code <span class="count">(%s)</span>',
+				'Code <span class="count">(%s)</span>',
+				'pro-mime-types'
+			),
+		],
+		'misc'        => [
+			\_x( 'Miscellaneous', 'file type group', 'pro-mime-types' ),
+			\__( 'Manage Miscellaneous', 'pro-mime-types' ),
+			/* translators: %s: Number of miscellaneous files. */
+			\_n_noop(
+				'Miscellaneous <span class="count">(%s)</span>',
+				'Miscellaneous <span class="count">(%s)</span>',
+				'pro-mime-types'
+			),
+		],
+	];
+
+	$ext_types  = \wp_get_ext_types();
+	$mime_types = \wp_get_mime_types();
+
+	foreach ( $post_mime_types as $group => $labels ) {
+		// Always allow sorting of image, audio, and video.
+		if ( \in_array( $group, [ 'image', 'audio', 'video' ], true ) )
+			continue;
+
+		if ( ! isset( $ext_types[ $group ] ) ) {
+			unset( $post_mime_types[ $group ] );
+			continue;
+		}
+
+		$group_mime_types = [];
+		foreach ( $ext_types[ $group ] as $extension ) {
+			foreach ( $mime_types as $exts => $mime ) {
+				if ( preg_match( '!^(' . $exts . ')$!i', $extension ) ) {
+					$group_mime_types[] = $mime;
+					break;
+				}
+			}
+		}
+		$group_mime_types = implode( ',', array_unique( $group_mime_types ) );
+
+		$post_mime_types[ $group_mime_types ] = $labels;
+		unset( $post_mime_types[ $group ] );
+	}
+
+	return $post_mime_types;
+}
+
+/**
  * Filters the "real" file type of the given file.
  *
  * @since 2.0.0
  * @access private
+ * @see wp_check_filetype_and_ext(), this function replicates its behavior.
  *
  * @param array        $wp_check_filetype_and_ext {
  *     Values for the extension, mime type, and corrected filename.
@@ -164,7 +355,7 @@ function _register_ext2type( $ext2type ) {
  * @param string[]     $mimes                     Array of mime types keyed by their file extension regex.
  * @param string|false $real_mime                 The actual mime type or false if the type cannot be determined.
  */
-function _allow_plaintext_filetype_and_ext( $wp_check_filetype_and_ext, $file, $filename, $mimes, $real_mime ) {
+function _allow_real_filetype_and_ext( $wp_check_filetype_and_ext, $file, $filename, $mimes, $real_mime ) {
 
 	$ext             = $wp_check_filetype_and_ext['ext'];
 	$type            = $wp_check_filetype_and_ext['type'];
@@ -172,22 +363,65 @@ function _allow_plaintext_filetype_and_ext( $wp_check_filetype_and_ext, $file, $
 
 	if (
 		( $ext && $type ) // Already passed.
-		|| ! $real_mime   // Unsupported file ext.; cannot check real file type and still failed!
-		|| 'text/plain' !== $real_mime // This is what we're gonna test, after all.
+		|| ( ! $real_mime || ! \is_string( $real_mime ) ) // Unsupported mime check.
 	) return compact( 'ext', 'type', 'proper_filename' );
 
-	// Redo basic extension validation and MIME mapping.
-	$wp_filetype = \wp_check_filetype( $filename, $mimes );
-	$ext         = $wp_filetype['ext'];
-	$type        = $wp_filetype['type'];
+	// Let's not leak through.
+	$ext  = false;
+	$type = false;
 
-	if ( $type ) {
-		$allowed = \get_allowed_mime_types();
+	$allowed = \get_allowed_mime_types();
 
-		if ( ! \in_array( $type, $allowed, true ) ) {
-			$type = false;
-			$ext  = false;
+	if ( \str_starts_with( $real_mime, 'text/' ) ) {
+		// Get all mime types of type text and code; these are assumed plaintext by PHP ($real_mime).
+		// Then, test whether BOTH the MIME type AND extension are allowed. Because some
+		// servers interpret plaintext files with certain extensions as-is, which is dangerous.
+		$text_and_code_mimes = array_intersect_key(
+			// This creates [ 'jpg|jpeg|jpe' => 'image/jpeg' ], aka [ extension_regex => mime ];
+			array_column( SUPPORTED_MIME_TYPES, 1, 0 ),
+			array_intersect(
+				// This creates [ 'jpg|jpeg|jpe' => 'image' ], aka [ extension_regex => type ];
+				array_column( SUPPORTED_MIME_TYPES, 4, 0 ),
+				[ 'text', 'code' ]
+			)
+		);
+
+		foreach ( $text_and_code_mimes as $extension_regex => $mime_type )
+			if ( ! isset( $allowed[ $extension_regex ] ) )
+				unset( $text_and_code_mimes[ $extension_regex ] );
+
+		// Redo basic extension to MIME mapping. This
+		$wp_filetype = \wp_check_filetype( $filename, $text_and_code_mimes );
+		$ext         = $wp_filetype['ext'];
+		$type        = $wp_filetype['type'];
+
+		// No "lookalike" text/plain match found.
+		if ( ! $ext || ! $type )
+			return compact( 'ext', 'type', 'proper_filename' );
+	} else {
+		if ( 'image/heif' === $real_mime ) {
+			// PHP switches around image/heic and image/heif for heif and heic respectively...
+			// Convert either found to image/heic.
+			$assumed_extension_and_mimes = [
+				'heic|heif' => 'image/heic',
+			];
 		}
+		// Candidates, '$ext', 'realmime'
+		// 'class', 'application/java'
+
+		if ( isset( $assumed_extension_and_mimes ) ) {
+			// Redo basic extension validation and MIME mapping.
+			$wp_filetype = \wp_check_filetype( $filename, $assumed_extension_and_mimes );
+			$ext         = $wp_filetype['ext'];
+			$type        = $wp_filetype['type'];
+		}
+	}
+
+	// $type shouldn't have been populated if it wasn't in $allowed. Still...
+	// Sanity: Must be an allowed mime type.
+	if ( ! \in_array( $type, $allowed, true ) ) {
+		$ext  = false;
+		$type = false;
 	}
 
 	return compact( 'ext', 'type', 'proper_filename' );
