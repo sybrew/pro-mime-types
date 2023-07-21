@@ -179,7 +179,6 @@ function _output_tab_content( $current_tab ) {
 			break;
 		case 'allowed-types':
 			include \Pro_Mime_Types\PLUGIN_DIR_PATH . 'views/tab-allowed-types.php';
-			break;
 	}
 }
 

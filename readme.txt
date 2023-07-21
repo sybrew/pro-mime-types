@@ -1,4 +1,4 @@
-=== Pro Mime Types ===
+=== Pro Mime Types - Manage file media types ===
 Contributors: Cybr
 Donate link: https://github.com/sponsors/sybrew
 Tags: mimes, mime types, types, multisite, network, upload, attachment, security, images, video, pdf
@@ -33,7 +33,7 @@ For WordPress Multisite networks, enable this plugin in network-mode control MIM
 * For Multisite: This plugin can run in single-site mode, where every subsite has custom-allowed MIME types. Only the network administrator can assign these.
 * For Multisite: This plugin can run in network mode, where all sites are allowed the same MIME types. You can configure the allowed MIME types via the network administration UI.
 
-**Note:** PHP file type support cannot be enabled to protect you.
+**Note:** Direct PHP file uploads cannot be enabled via this plugin. You should use FTP for that.
 
 == Installation ==
 
