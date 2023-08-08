@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: Pro Mime Types - Manage file media types 2.0.0\n"
+"Project-Id-Version: Pro Mime Types - Manage file media types 2.0.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/pro-mime-types\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-05-09T01:54:17+00:00\n"
+"POT-Creation-Date: 2023-08-08T15:06:49+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: pro-mime-types\n"
@@ -34,7 +34,7 @@ msgstr ""
 msgid "https://cyberwire.nl/"
 msgstr ""
 
-#: inc/admin.php:198
+#: inc/admin.php:197
 msgid "Sorry, you are not allowed to update Pro Mime Types settings."
 msgstr ""
 
@@ -86,81 +86,47 @@ msgid_plural "Miscellaneous <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: promimetypes.php:242
-#: promimetypes.php:243
-#: promimetypes.php:245
-#: promimetypes.php:247
-#: promimetypes.php:249
-#: promimetypes.php:255
-#: promimetypes.php:260
-#: promimetypes.php:261
-#: promimetypes.php:262
-#: promimetypes.php:263
-#: promimetypes.php:264
-#: promimetypes.php:265
-#: promimetypes.php:267
-#: promimetypes.php:271
-#: promimetypes.php:272
-#: promimetypes.php:273
-#: promimetypes.php:274
-#: promimetypes.php:276
-#: promimetypes.php:277
-#: promimetypes.php:279
-#: promimetypes.php:281
-#: promimetypes.php:313
-#: promimetypes.php:314
-#: promimetypes.php:315
+#: promimetypes.php:178
+msgid "XML file formats can be executed by the browser when interpreted in HTML."
+msgstr ""
+
+#: promimetypes.php:179
 msgid "Can contain macros which office software may execute."
 msgstr ""
 
-#: promimetypes.php:244
-#: promimetypes.php:246
-#: promimetypes.php:266
-#: promimetypes.php:268
-#: promimetypes.php:275
-#: promimetypes.php:278
-#: promimetypes.php:280
-#: promimetypes.php:282
-#: promimetypes.php:304
-#: promimetypes.php:307
-#: promimetypes.php:316
-msgid "XML file formats can be executed by the browser when interpreted as HTML."
-msgstr ""
-
-#: promimetypes.php:250
-msgid "Can exploit vulnerabilities when opened in browsers."
-msgstr ""
-
-#: promimetypes.php:294
-#: promimetypes.php:295
-#: promimetypes.php:297
-#: promimetypes.php:298
-#: promimetypes.php:299
-#: promimetypes.php:300
+#: promimetypes.php:180
 msgid "Compressed file format, can contain unwanted stuff."
 msgstr ""
 
-#: promimetypes.php:296
+#: promimetypes.php:211
+msgid "XML file formats can be executed by the browser when interpreted in HTML. SVG is always interpreted in HTML."
+msgstr ""
+
+#: promimetypes.php:255
+msgid "Can exploit vulnerabilities when opened in browsers."
+msgstr ""
+
+#: promimetypes.php:301
 msgid "Compressed file format, can contain unwanted stuff. Executes in browser."
 msgstr ""
 
-#: promimetypes.php:303
+#: promimetypes.php:308
 msgid "CSS can import external resources in the browser."
 msgstr ""
 
-#: promimetypes.php:305
+#: promimetypes.php:310
 msgid "Can run in iframes through shortcodes. Can import javascript. Can import CSS."
 msgstr ""
 
-#: promimetypes.php:306
+#: promimetypes.php:311
 msgid "Can execute code in browser."
 msgstr ""
 
-#: promimetypes.php:311
+#: promimetypes.php:316
 msgid "Can be executed by some servers."
 msgstr ""
 
-#: promimetypes.php:312
+#: promimetypes.php:317
 msgid "Can install unwanted software."
 msgstr ""
 

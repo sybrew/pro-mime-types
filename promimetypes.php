@@ -175,7 +175,9 @@ function get_allowed_mime_types_settings() {
  */
 function _define_supported_mime_types() {
 
-	$is_svg_i18n = \__( 'XML file formats can be executed by the browser when interpreted as HTML.', 'pro-mime-types' );
+	$is_svg_i18n        = \__( 'XML file formats can be executed by the browser when interpreted in HTML.', 'pro-mime-types' );
+	$is_macro_i18n      = \__( 'Can contain macros which office software may execute.', 'pro-mime-types' );
+	$is_compressed_i18n = \__( 'Compressed file format, can contain unwanted stuff.', 'pro-mime-types' );
 
 	/**
 	 * @since 2.0.0
@@ -206,7 +208,7 @@ function _define_supported_mime_types() {
 				[ 'ico', 'image/x-icon', MIME_DANGER_LEVEL['safe'], '', 'image' ],
 				[ 'jpg|jpeg|jpe|jif|jfif', 'image/jpeg', MIME_DANGER_LEVEL['safe'], '', 'image' ],
 				[ 'png', 'image/png', MIME_DANGER_LEVEL['safe'], '', 'image' ],
-				[ 'svg', 'image/svg+xml', MIME_DANGER_LEVEL['high-risk'], $is_svg_i18n, 'image' ],
+				[ 'svg', 'image/svg+xml', MIME_DANGER_LEVEL['dangerous'], \__( 'XML file formats can be executed by the browser when interpreted in HTML. SVG is always interpreted in HTML.', 'pro-mime-types' ), 'image' ], // Dangerous: This XML type is always executed.
 				[ 'tif|tiff', 'image/tiff', MIME_DANGER_LEVEL['safe'], '', 'image' ],
 				[ 'webp', 'image/webp', MIME_DANGER_LEVEL['safe'], '', 'image' ],
 
@@ -242,46 +244,46 @@ function _define_supported_mime_types() {
 				[ 'wmx', 'video/x-ms-wmx', MIME_DANGER_LEVEL['safe'], '', 'video' ],
 
 				// Document formats.
-				[ 'doc', 'application/msword', MIME_DANGER_LEVEL['low-risk'], \__( 'Can contain macros which office software may execute.', 'pro-mime-types' ), 'document' ],
-				[ 'docm', 'application/vnd.ms-word.document.macroEnabled.12', MIME_DANGER_LEVEL['low-risk'], \__( 'Can contain macros which office software may execute.', 'pro-mime-types' ), 'document' ],
+				[ 'doc', 'application/msword', MIME_DANGER_LEVEL['low-risk'], $is_macro_i18n, 'document' ],
+				[ 'docm', 'application/vnd.ms-word.document.macroEnabled.12', MIME_DANGER_LEVEL['low-risk'], $is_macro_i18n, 'document' ],
 				[ 'docx', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', MIME_DANGER_LEVEL['low-risk'], $is_svg_i18n, 'document' ],
-				[ 'dotm', 'application/vnd.ms-word.template.macroEnabled.12', MIME_DANGER_LEVEL['low-risk'], \__( 'Can contain macros which office software may execute.', 'pro-mime-types' ), 'document' ],
+				[ 'dotm', 'application/vnd.ms-word.template.macroEnabled.12', MIME_DANGER_LEVEL['low-risk'], $is_macro_i18n, 'document' ],
 				[ 'dotx', 'application/vnd.openxmlformats-officedocument.wordprocessingml.template', MIME_DANGER_LEVEL['low-risk'], $is_svg_i18n, 'document' ],
-				[ 'odt', 'application/vnd.oasis.opendocument.text', MIME_DANGER_LEVEL['low-risk'], \__( 'Can contain macros which office software may execute.', 'pro-mime-types' ), 'document' ],
+				[ 'odt', 'application/vnd.oasis.opendocument.text', MIME_DANGER_LEVEL['low-risk'], $is_macro_i18n, 'document' ],
 				[ 'oxps', 'application/oxps', MIME_DANGER_LEVEL['safe'], '', 'document' ],
-				[ 'pages', 'application/vnd.apple.pages', MIME_DANGER_LEVEL['low-risk'], \__( 'Can contain macros which office software may execute.', 'pro-mime-types' ), 'document' ],
+				[ 'pages', 'application/vnd.apple.pages', MIME_DANGER_LEVEL['low-risk'], $is_macro_i18n, 'document' ],
 				[ 'pdf', 'application/pdf', MIME_DANGER_LEVEL['low-risk'], \__( 'Can exploit vulnerabilities when opened in browsers.', 'pro-mime-types' ), 'document' ],
 				[ 'psd', 'image/vnd.adobe.photoshop', MIME_DANGER_LEVEL['safe'], '', 'document' ],
 				[ 'ai', 'application/postscript', MIME_DANGER_LEVEL['safe'], '', 'document' ],
 				[ 'rtf', 'application/rtf', MIME_DANGER_LEVEL['safe'], '', 'document' ],
 				[ 'wri', 'application/vnd.ms-write', MIME_DANGER_LEVEL['safe'], '', 'document' ],
-				[ 'wp|wpd', 'application/wordperfect', MIME_DANGER_LEVEL['low-risk'], \__( 'Can contain macros which office software may execute.', 'pro-mime-types' ), 'document' ],
+				[ 'wp|wpd', 'application/wordperfect', MIME_DANGER_LEVEL['low-risk'], $is_macro_i18n, 'document' ],
 				[ 'xcf', 'image/x-xcf', MIME_DANGER_LEVEL['safe'], '', 'document' ],
 				[ 'xps', 'application/vnd.ms-xpsdocument', MIME_DANGER_LEVEL['safe'], '', 'document' ],
 
 				// Spreadsheet formats.
-				[ 'numbers', 'application/vnd.apple.numbers', MIME_DANGER_LEVEL['low-risk'], \__( 'Can contain macros which office software may execute.', 'pro-mime-types' ), 'spreadsheet' ],
-				[ 'ods', 'application/vnd.oasis.opendocument.spreadsheet', MIME_DANGER_LEVEL['low-risk'], \__( 'Can contain macros which office software may execute.', 'pro-mime-types' ), 'spreadsheet' ],
-				[ 'xla|xls|xlt|xlw', 'application/vnd.ms-excel', MIME_DANGER_LEVEL['low-risk'], \__( 'Can contain macros which office software may execute.', 'pro-mime-types' ), 'spreadsheet' ],
-				[ 'xlam', 'application/vnd.ms-excel.addin.macroEnabled.12', MIME_DANGER_LEVEL['low-risk'], \__( 'Can contain macros which office software may execute.', 'pro-mime-types' ), 'spreadsheet' ],
-				[ 'xlsb', 'application/vnd.ms-excel.sheet.binary.macroEnabled.12', MIME_DANGER_LEVEL['low-risk'], \__( 'Can contain macros which office software may execute.', 'pro-mime-types' ), 'spreadsheet' ],
-				[ 'xlsm', 'application/vnd.ms-excel.sheet.macroEnabled.12', MIME_DANGER_LEVEL['low-risk'], \__( 'Can contain macros which office software may execute.', 'pro-mime-types' ), 'spreadsheet' ],
+				[ 'numbers', 'application/vnd.apple.numbers', MIME_DANGER_LEVEL['low-risk'], $is_macro_i18n, 'spreadsheet' ],
+				[ 'ods', 'application/vnd.oasis.opendocument.spreadsheet', MIME_DANGER_LEVEL['low-risk'], $is_macro_i18n, 'spreadsheet' ],
+				[ 'xla|xls|xlt|xlw', 'application/vnd.ms-excel', MIME_DANGER_LEVEL['low-risk'], $is_macro_i18n, 'spreadsheet' ],
+				[ 'xlam', 'application/vnd.ms-excel.addin.macroEnabled.12', MIME_DANGER_LEVEL['low-risk'], $is_macro_i18n, 'spreadsheet' ],
+				[ 'xlsb', 'application/vnd.ms-excel.sheet.binary.macroEnabled.12', MIME_DANGER_LEVEL['low-risk'], $is_macro_i18n, 'spreadsheet' ],
+				[ 'xlsm', 'application/vnd.ms-excel.sheet.macroEnabled.12', MIME_DANGER_LEVEL['low-risk'], $is_macro_i18n, 'spreadsheet' ],
 				[ 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', MIME_DANGER_LEVEL['low-risk'], $is_svg_i18n, 'spreadsheet' ],
-				[ 'xltm', 'application/vnd.ms-excel.template.macroEnabled.12', MIME_DANGER_LEVEL['low-risk'], \__( 'Can contain macros which office software may execute.', 'pro-mime-types' ), 'spreadsheet' ],
+				[ 'xltm', 'application/vnd.ms-excel.template.macroEnabled.12', MIME_DANGER_LEVEL['low-risk'], $is_macro_i18n, 'spreadsheet' ],
 				[ 'xltx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.template', MIME_DANGER_LEVEL['low-risk'], $is_svg_i18n, 'spreadsheet' ],
 
 				// Interactive formats.
-				[ 'key', 'application/vnd.apple.keynote', MIME_DANGER_LEVEL['low-risk'], \__( 'Can contain macros which office software may execute.', 'pro-mime-types' ), 'interactive' ],
-				[ 'odp', 'application/vnd.oasis.opendocument.presentation', MIME_DANGER_LEVEL['low-risk'], \__( 'Can contain macros which office software may execute.', 'pro-mime-types' ), 'interactive' ],
-				[ 'pot|pps|ppt', 'application/vnd.ms-powerpoint', MIME_DANGER_LEVEL['low-risk'], \__( 'Can contain macros which office software may execute.', 'pro-mime-types' ), 'interactive' ],
-				[ 'potm', 'application/vnd.ms-powerpoint.template.macroEnabled.12', MIME_DANGER_LEVEL['low-risk'], \__( 'Can contain macros which office software may execute.', 'pro-mime-types' ), 'interactive' ],
+				[ 'key', 'application/vnd.apple.keynote', MIME_DANGER_LEVEL['low-risk'], $is_macro_i18n, 'interactive' ],
+				[ 'odp', 'application/vnd.oasis.opendocument.presentation', MIME_DANGER_LEVEL['low-risk'], $is_macro_i18n, 'interactive' ],
+				[ 'pot|pps|ppt', 'application/vnd.ms-powerpoint', MIME_DANGER_LEVEL['low-risk'], $is_macro_i18n, 'interactive' ],
+				[ 'potm', 'application/vnd.ms-powerpoint.template.macroEnabled.12', MIME_DANGER_LEVEL['low-risk'], $is_macro_i18n, 'interactive' ],
 				[ 'potx', 'application/vnd.openxmlformats-officedocument.presentationml.template', MIME_DANGER_LEVEL['low-risk'], $is_svg_i18n, 'interactive' ],
-				[ 'ppam', 'application/vnd.ms-powerpoint.addin.macroEnabled.12', MIME_DANGER_LEVEL['low-risk'], \__( 'Can contain macros which office software may execute.', 'pro-mime-types' ), 'interactive' ],
-				[ 'ppsm', 'application/vnd.ms-powerpoint.slideshow.macroEnabled.12', MIME_DANGER_LEVEL['low-risk'], \__( 'Can contain macros which office software may execute.', 'pro-mime-types' ), 'interactive' ],
+				[ 'ppam', 'application/vnd.ms-powerpoint.addin.macroEnabled.12', MIME_DANGER_LEVEL['low-risk'], $is_macro_i18n, 'interactive' ],
+				[ 'ppsm', 'application/vnd.ms-powerpoint.slideshow.macroEnabled.12', MIME_DANGER_LEVEL['low-risk'], $is_macro_i18n, 'interactive' ],
 				[ 'ppsx', 'application/vnd.openxmlformats-officedocument.presentationml.slideshow', MIME_DANGER_LEVEL['low-risk'], $is_svg_i18n, 'interactive' ],
-				[ 'pptm', 'application/vnd.ms-powerpoint.presentation.macroEnabled.12', MIME_DANGER_LEVEL['low-risk'], \__( 'Can contain macros which office software may execute.', 'pro-mime-types' ), 'interactive' ],
+				[ 'pptm', 'application/vnd.ms-powerpoint.presentation.macroEnabled.12', MIME_DANGER_LEVEL['low-risk'], $is_macro_i18n, 'interactive' ],
 				[ 'pptx', 'application/vnd.openxmlformats-officedocument.presentationml.presentation', MIME_DANGER_LEVEL['low-risk'], $is_svg_i18n, 'interactive' ],
-				[ 'sldm', 'application/vnd.ms-powerpoint.slide.macroEnabled.12', MIME_DANGER_LEVEL['low-risk'], \__( 'Can contain macros which office software may execute.', 'pro-mime-types' ), 'interactive' ],
+				[ 'sldm', 'application/vnd.ms-powerpoint.slide.macroEnabled.12', MIME_DANGER_LEVEL['low-risk'], $is_macro_i18n, 'interactive' ],
 				[ 'sldx', 'application/vnd.openxmlformats-officedocument.presentationml.slide', MIME_DANGER_LEVEL['low-risk'], $is_svg_i18n, 'interactive' ],
 
 				// Text formats.
@@ -294,13 +296,13 @@ function _define_supported_mime_types() {
 				[ 'vtt', 'text/vtt', MIME_DANGER_LEVEL['safe'], '', 'text' ],
 
 				// Archive formats.
-				[ '7z', 'application/x-7z-compressed', MIME_DANGER_LEVEL['high-risk'], \__( 'Compressed file format, can contain unwanted stuff.', 'pro-mime-types' ), 'archive' ],
-				[ 'cab', 'application/vnd.ms-cab-compressed', MIME_DANGER_LEVEL['high-risk'], \__( 'Compressed file format, can contain unwanted stuff.', 'pro-mime-types' ), 'archive' ],
+				[ '7z', 'application/x-7z-compressed', MIME_DANGER_LEVEL['high-risk'], $is_compressed_i18n, 'archive' ],
+				[ 'cab', 'application/vnd.ms-cab-compressed', MIME_DANGER_LEVEL['high-risk'], $is_compressed_i18n, 'archive' ],
 				[ 'gz|gzip', 'application/x-gzip', MIME_DANGER_LEVEL['dangerous'], \__( 'Compressed file format, can contain unwanted stuff. Executes in browser.', 'pro-mime-types' ), 'archive' ],
-				[ 'img|2mg|smi|dmg', 'application/x-apple-diskimage', MIME_DANGER_LEVEL['high-risk'], \__( 'Compressed file format, can contain unwanted stuff.', 'pro-mime-types' ), 'archive' ],
-				[ 'rar', 'application/rar', MIME_DANGER_LEVEL['high-risk'], \__( 'Compressed file format, can contain unwanted stuff.', 'pro-mime-types' ), 'archive' ],
-				[ 'tar', 'application/x-tar', MIME_DANGER_LEVEL['high-risk'], \__( 'Compressed file format, can contain unwanted stuff.', 'pro-mime-types' ), 'archive' ],
-				[ 'zip', 'application/zip', MIME_DANGER_LEVEL['high-risk'], \__( 'Compressed file format, can contain unwanted stuff.', 'pro-mime-types' ), 'archive' ],
+				[ 'img|2mg|smi|dmg', 'application/x-apple-diskimage', MIME_DANGER_LEVEL['high-risk'], $is_compressed_i18n, 'archive' ],
+				[ 'rar', 'application/rar', MIME_DANGER_LEVEL['high-risk'], $is_compressed_i18n, 'archive' ],
+				[ 'tar', 'application/x-tar', MIME_DANGER_LEVEL['high-risk'], $is_compressed_i18n, 'archive' ],
+				[ 'zip', 'application/zip', MIME_DANGER_LEVEL['high-risk'], $is_compressed_i18n, 'archive' ],
 
 				// Code formats.
 				[ 'css', 'text/css', MIME_DANGER_LEVEL['high-risk'], \__( 'CSS can import external resources in the browser.', 'pro-mime-types' ), 'code' ],
@@ -313,9 +315,9 @@ function _define_supported_mime_types() {
 				// Misc application formats.
 				[ 'class', 'application/x-httpd-java', MIME_DANGER_LEVEL['high-risk'], \__( 'Can be executed by some servers.', 'pro-mime-types' ), 'misc' ],
 				[ 'exe', 'application/x-msdownload', MIME_DANGER_LEVEL['dangerous'], \__( 'Can install unwanted software.', 'pro-mime-types' ), 'misc' ],
-				[ 'mdb', 'application/vnd.ms-access', MIME_DANGER_LEVEL['low-risk'], \__( 'Can contain macros which office software may execute.', 'pro-mime-types' ), 'misc' ],
-				[ 'mpp', 'application/vnd.ms-project', MIME_DANGER_LEVEL['low-risk'], \__( 'Can contain macros which office software may execute.', 'pro-mime-types' ), 'misc' ],
-				[ 'odb', 'application/vnd.oasis.opendocument.database', MIME_DANGER_LEVEL['low-risk'], \__( 'Can contain macros which office software may execute.', 'pro-mime-types' ), 'misc' ],
+				[ 'mdb', 'application/vnd.ms-access', MIME_DANGER_LEVEL['low-risk'], $is_macro_i18n, 'misc' ],
+				[ 'mpp', 'application/vnd.ms-project', MIME_DANGER_LEVEL['low-risk'], $is_macro_i18n, 'misc' ],
+				[ 'odb', 'application/vnd.oasis.opendocument.database', MIME_DANGER_LEVEL['low-risk'], $is_macro_i18n, 'misc' ],
 				[ 'odc', 'application/vnd.oasis.opendocument.chart', MIME_DANGER_LEVEL['low-risk'], $is_svg_i18n, 'misc' ],
 				[ 'odf', 'application/vnd.oasis.opendocument.formula', MIME_DANGER_LEVEL['safe'], '', 'misc' ],
 				[ 'odg', 'application/vnd.oasis.opendocument.graphics', MIME_DANGER_LEVEL['safe'], '', 'misc' ],

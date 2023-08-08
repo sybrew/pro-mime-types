@@ -63,8 +63,9 @@ If you find an issue, please open a [support topic](https://wordpress.org/suppor
 
 = 2.0.1 =
 
-* `.svg` was inattentively marked as a "safe" file extension, which it's not. Consider using the [Safe SVG plugin](https://wordpress.org/plugins/safe-svg/) to sanitize SVG uploads (you must still allow them via Pro Mime Types). If you do not use SVGs, you should disallow it being uploaded.
-* Improved performance by caching repeated translations.
+* Changed: `.svg` was inattentively marked as a "safe" file extension, which it's not. Consider using the [Safe SVG plugin](https://wordpress.org/plugins/safe-svg/) to sanitize SVG uploads (you must still allow them via Pro Mime Types). If you do not use SVGs, you should disallow it from being uploaded.
+* Improved: The plugin is faster now since it now memoizes repeated translations.
+* Updated: New translations are available.
 
 = 2.0.0 =
 
