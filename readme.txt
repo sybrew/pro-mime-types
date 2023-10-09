@@ -20,7 +20,7 @@ You can also see the list of all active MIME types on the site or network.
 - When a MIME type is allowed: Users allowed to upload files can now do so for that MIME type.
 - When a MIME type is disallowed: The user gets an error that the file isn't allowed for security reasons.
 
-For WordPress Multisite networks, enable this plugin in network-mode control MIME types on the entire network.
+For WordPress Multisite networks, enable this plugin in network-mode to control MIME types for the entire network.
 
 = Features =
 
@@ -63,8 +63,8 @@ If you find an issue, please open a [support topic](https://wordpress.org/suppor
 
 = 2.0.1 =
 
-* Changed: `.svg` was inattentively marked as a "safe" file extension, which it's not. Consider using the [Safe SVG plugin](https://wordpress.org/plugins/safe-svg/) to sanitize SVG uploads (you must still allow them via Pro Mime Types). If you do not use SVGs, you should disallow it from being uploaded.
-* Improved: The plugin is faster now since it now memoizes repeated translations.
+* Changed: `.svg` was inattentively marked as a "safe" file extension, which it's not. Consider using the [Safe SVG plugin](https://wordpress.org/plugins/safe-svg/) to sanitize SVG uploads (you must still allow them via Pro Mime Types). If you do not use SVGs, you should disallow them from being uploaded.
+* Improved: The plugin is faster now since it memoizes repeated translations.
 * Updated: New translations are available.
 
 = 2.0.0 =
