@@ -22,7 +22,7 @@ You can also see the list of all active MIME types on the site or network.
 
 For WordPress Multisite networks, enable this plugin in network-mode to control MIME types for the entire network.
 
-= Features =
+### Features
 
 * Control many MIME types for upload via a modern interface.
 * All assumed safe MIME types are enabled by default.
@@ -60,6 +60,22 @@ If you find an issue, please open a [support topic](https://wordpress.org/suppor
 `image/bmp`, `image/gif`, `image/heic`, `image/x-icon`, `image/jpeg`, `image/png`, `image/svg+xml`, `image/tiff`, `image/webp`, `audio/aac`, `audio/ac3`, `audio/aiff`, `audio/flac`, `audio/midi`, `audio/x-matroska`, `audio/mpeg`, `audio/ogg`, `audio/x-realaudio`, `audio/wav`, `audio/x-ms-wax`, `audio/x-ms-wma`, `video/3gpp2`, `video/3gpp`, `video/x-ms-asf`, `video/avi`, `video/divx`, `video/x-matroska`, `video/quicktime`, `video/mp4`, `video/mpeg`, `video/ogg`, `application/vnd.rn-realmedia`, `video/webm`, `video/x-ms-wm`, `video/x-ms-wmv`, `video/x-ms-wmx`, `application/msword`, `application/vnd.ms-word.document.macroEnabled.12`, `application/vnd.openxmlformats-officedocument.wordprocessingml.document`, `application/vnd.ms-word.template.macroEnabled.12`, `application/vnd.openxmlformats-officedocument.wordprocessingml.template`, `application/vnd.oasis.opendocument.text`, `application/oxps`, `application/vnd.apple.pages`, `application/pdf`, `image/vnd.adobe.photoshop`, `application/postscript`, `application/rtf`, `application/vnd.ms-write`, `application/wordperfect`, `image/x-xcf`, `application/vnd.ms-xpsdocument`, `application/vnd.apple.numbers`, `application/vnd.oasis.opendocument.spreadsheet`, `application/vnd.ms-excel`, `application/vnd.ms-excel.addin.macroEnabled.12`, `application/vnd.ms-excel.sheet.binary.macroEnabled.12`, `application/vnd.ms-excel.sheet.macroEnabled.12`, `application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`, `application/vnd.ms-excel.template.macroEnabled.12`, `application/vnd.openxmlformats-officedocument.spreadsheetml.template`, `application/vnd.apple.keynote`, `application/vnd.oasis.opendocument.presentation`, `application/vnd.ms-powerpoint`, `application/vnd.ms-powerpoint.template.macroEnabled.12`, `application/vnd.openxmlformats-officedocument.presentationml.template`, `application/vnd.ms-powerpoint.addin.macroEnabled.12`, `application/vnd.ms-powerpoint.slideshow.macroEnabled.12`, `application/vnd.openxmlformats-officedocument.presentationml.slideshow`, `application/vnd.ms-powerpoint.presentation.macroEnabled.12`, `application/vnd.openxmlformats-officedocument.presentationml.presentation`, `application/vnd.ms-powerpoint.slide.macroEnabled.12`, `application/vnd.openxmlformats-officedocument.presentationml.slide`, `text/csv`, `text/calendar`, `text/markdown`, `text/richtext`, `text/tab-separated-values`, `text/plain`, `text/vtt`, `application/x-7z-compressed`, `application/vnd.ms-cab-compressed`, `application/x-gzip`, `application/x-apple-diskimage`, `application/rar`, `application/x-tar`, `application/zip`, `text/css`, `application/ttaf+xml`, `text/html`, `application/javascript`, `application/xhtml+xml`, `application/x-httpd-java`, `application/x-msdownload`, `application/vnd.ms-access`, `application/vnd.ms-project`, `application/vnd.oasis.opendocument.database`, `application/vnd.oasis.opendocument.chart`, `application/vnd.oasis.opendocument.formula`, `application/vnd.oasis.opendocument.graphics`, and `application/onenote`.
 
 == Changelog ==
+
+= 2.0.2 =
+
+* Upgrade: TODO The stored settings will now convert from regex-based to key-based.
+* Added: AVIF is now supported (image/avif, .avif|avifs). You require WP 6.5 or later to prevent corruption of the upload.
+* Added: TODO The settings link has been added to Pro Mime Types's listing on the plugin activation page.
+	* In network mode, only the network administrator will see this and it will be accessible from any subsite.
+* Changed: constant `Pro_Mime_Types\SUPPORTED_MIME_TYPES` is now an associative array (with index keys), instead of a sequential one.
+	* Filter `pmt_supported_mime_types` is directly affected by this change, but using sequential values is still possible, though they may not be stored properly.
+* Fixed: .exe is now assigned the MIME type PHP recognizes, instead of what Windows does.
+	Should be `application/x-dosexec` instead of `application/x-msdownload`.
+* TODO: add to description/name of plugin that it's meant to allow "uploading" of the file types.
+	-> Pro Mime Types enables you to allow or block MIME types for media files and other attachment uploads through a nifty (network) admin menu. /cur
+	-> Pro Mime Types allows you to enable and block most file extensions for media and attachment uploading via a nifty (network) admin interface.
+* TODO inspect https://github.com/WordPress/wordpress-develop/pull/1232
+* TODO upgrade copyright year.
 
 = 2.0.1 =
 

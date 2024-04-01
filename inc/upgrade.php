@@ -120,7 +120,7 @@ function _register_or_upgrade_settings() {
 			]
 			as $old => $new
 		) {
-			if ( in_array( $old, $supported_extensions, true ) ) {
+			if ( \in_array( $old, $supported_extensions, true ) ) {
 				// It'd be faster if we'd collect the "$old", and then perform an array_diff... oh well.
 				$supported_extensions   = array_diff( $supported_extensions, [ $old ] );
 				$supported_extensions[] = $new;
