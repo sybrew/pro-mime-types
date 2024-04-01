@@ -1,15 +1,15 @@
 === Pro Mime Types - Manage file media types ===
 Contributors: Cybr
 Donate link: https://github.com/sponsors/sybrew
-Tags: mimes, mime types, types, multisite, network, upload, attachment, security, images, video, pdf
+Tags: attachment, image, mime types, upload, multisite
 Requires at least: 5.3
 Tested up to: 6.2
 Requires PHP: 7.4.0
-Stable tag: 2.0.1
+Stable tag: 2.1.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Pro Mime Types enables you to allow or block MIME types for media files and other attachment uploads through a nifty (network) admin menu.
+Pro Mime Types adds a nifty (network) admin interface to allow or block many file extensions for media, document, and other attachment uploading.
 
 == Description ==
 
@@ -65,17 +65,15 @@ If you find an issue, please open a [support topic](https://wordpress.org/suppor
 
 * Upgrade: TODO The stored settings will now convert from regex-based to key-based.
 * Added: AVIF is now supported (image/avif, .avif|avifs). You require WP 6.5 or later to prevent corruption of the upload.
-* Added: TODO The settings link has been added to Pro Mime Types's listing on the plugin activation page.
+* Added: The settings link has been added to Pro Mime Types's listing on the plugin activation page.
 	* In network mode, only the network administrator will see this and it will be accessible from any subsite.
 * Changed: constant `Pro_Mime_Types\SUPPORTED_MIME_TYPES` is now an associative array (with index keys), instead of a sequential one.
 	* Filter `pmt_supported_mime_types` is directly affected by this change, but using sequential values is still possible, though they may not be stored properly.
 * Fixed: .exe is now assigned the MIME type PHP recognizes, instead of what Windows does.
 	Should be `application/x-dosexec` instead of `application/x-msdownload`.
-* TODO: add to description/name of plugin that it's meant to allow "uploading" of the file types.
-	-> Pro Mime Types enables you to allow or block MIME types for media files and other attachment uploads through a nifty (network) admin menu. /cur
-	-> Pro Mime Types allows you to enable and block most file extensions for media and attachment uploading via a nifty (network) admin interface.
 * TODO inspect https://github.com/WordPress/wordpress-develop/pull/1232
 * TODO upgrade copyright year.
+* TODO add @hooks
 
 = 2.0.1 =
 

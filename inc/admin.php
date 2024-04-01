@@ -60,6 +60,18 @@ const SAVE_NONCE = [
 ];
 
 /**
+ * Tells whether the current user can manage Pro Mime Types's options.
+ *
+ * @since 2.1.0
+ * @access private
+ *
+ * @return bool
+ */
+function _current_user_can_manage_settings() {
+	return \current_user_can( \is_multisite() ? 'manage_network' : 'manage_options' );
+}
+
+/**
  * Binds the plugin on admin page load.
  *
  * @since 2.0.0
@@ -103,7 +115,7 @@ function _register_admin_menu() {
 			'Pro Mime Types',
 			'Pro Mime Types',
 			\is_multisite() ? 'manage_network' : 'manage_options',
-			'pro-mime-types',
+			PAGE_HOOK,
 			__NAMESPACE__ . '\_display_admin_page',
 		)
 	);
@@ -192,7 +204,7 @@ function _process_settings_submission() {
 
 	\check_admin_referer( SAVE_NONCE['action'], SAVE_NONCE['name'] );
 
-	if ( ! \current_user_can( \is_multisite() ? 'manage_network' : 'manage_options' ) )
+	if ( ! _current_user_can_manage_settings() )
 		\wp_die(
 			\esc_html__( 'Sorry, you are not allowed to update Pro Mime Types settings.', 'pro-mime-types' ),
 			403
@@ -220,4 +232,53 @@ function _process_settings_submission() {
 
 	\wp_safe_redirect( \add_query_arg( SAVED_RESPONSE, $result, \wp_get_referer() ) );
 	exit;
+}
+
+/**
+ * Adds various links to the plugin row on the plugin's screen.
+ *
+ * @since 2.1.0
+ * @access private
+ *
+ * @param array $links The current links.
+ * @return array The plugin links.
+ */
+function _add_plugin_action_links( $links ) {
+	return _current_user_can_manage_settings()
+		? array_merge(
+			[
+				'settings' => sprintf(
+					'<a href="%s">%s</a>',
+					is_network_mode()
+						? \esc_url( \network_admin_url( 'settings.php?page=' . PAGE_HOOK ) )
+						: \esc_url( \admin_url( 'admin.php?page=' . PAGE_HOOK ) ),
+					\esc_html__( 'Settings', 'pro-mime-types' ),
+				),
+			],
+			$links,
+		)
+		: $links;
+}
+
+/**
+ * Adds various links to the plugin row on the plugin's screen.
+ *
+ * @since 2.1.0
+ * @access private
+ *
+ * @param array $links The current links.
+ * @return array The plugin links.
+ */
+function _add_plugin_network_action_links( $links ) {
+	// No need to check for capabilities here. activate_plugins implies manage_options on single site. Technically, a bug.
+	return array_merge(
+		[
+			'settings' => sprintf(
+				'<a href="%s">%s</a>',
+				\esc_url( \network_admin_url( 'settings.php?page=' . PAGE_HOOK ) ),
+				\esc_html__( 'Settings', 'pro-mime-types' ),
+			),
+		],
+		$links,
+	);
 }

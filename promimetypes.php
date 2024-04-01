@@ -12,7 +12,7 @@
  * Plugin Name: Pro Mime Types - Manage file media types
  * Plugin URI: https://wordpress.org/plugins/pro-mime-types/
  * Description: Enable or block MIME types and file extensions for media / file / attachment uploads through a nifty (network) admin menu.
- * Version: 2.1.0-dev-1
+ * Version: 2.1.0-dev-2
  * Author: Sybre Waaijer
  * Author URI: https://cyberwire.nl/
  * License: GPLv3
@@ -127,9 +127,13 @@ function _plugin_init() {
 
 	if ( is_network_mode() ) {
 		\add_action( 'network_admin_menu', 'Pro_Mime_Types\Admin\_register_network_admin_menu' );
+		\add_filter( "network_admin_plugin_action_links_$basename", 'Pro_Mime_Types\Admin\_add_plugin_network_action_links' );
 	} else {
 		\add_action( 'admin_menu', 'Pro_Mime_Types\Admin\_register_admin_menu' );
 	}
+
+	// Also add link when in network mode. This will then go the network settings page.
+	\add_filter( "plugin_action_links_$basename", 'Pro_Mime_Types\Admin\_add_plugin_action_links' );
 
 	\add_action( 'admin_post_' . Admin\SAVE_ACTION, 'Pro_Mime_Types\Admin\_process_settings_submission' );
 	\add_action( 'pmt_admin_tab_content', 'Pro_Mime_Types\Admin\_output_tab_content' );
