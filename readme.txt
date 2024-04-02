@@ -72,7 +72,6 @@ If you find an issue, please open a [support topic](https://wordpress.org/suppor
 * Fixed: .exe is now assigned the MIME type PHP recognizes, instead of what Windows does.
 	Should be `application/x-dosexec` instead of `application/x-msdownload`.
 * TODO inspect https://github.com/WordPress/wordpress-develop/pull/1232
-* TODO upgrade copyright year.
 
 = 2.0.1 =
 

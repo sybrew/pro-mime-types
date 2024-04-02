@@ -4,7 +4,7 @@
  *
  * @package   Pro_Mime_Types
  * @author    Sybre Waaijer
- * @copyright 2023 CyberWire B.V. (https://cyberwire.nl/)
+ * @copyright 2024 CyberWire B.V. (https://cyberwire.nl/)
  * @license   GPL-3.0
  * @link      https://github.com/sybrew/pro-mime-types
  *
@@ -28,7 +28,7 @@ namespace Pro_Mime_Types;
 
 /**
  * Pro Mime Types plugin
- * Copyright (C) 2015 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2015 - 2024 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published

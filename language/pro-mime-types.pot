@@ -1,4 +1,4 @@
-# Copyright (C) 2023 Sybre Waaijer
+# Copyright (C) 2023 - 2024 Sybre Waaijer
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
