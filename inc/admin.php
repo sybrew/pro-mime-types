@@ -86,6 +86,7 @@ function _bind_admin_hook( $page ) {
 /**
  * Registers the multisite menu.
  *
+ * @hook network_admin_menu 10
  * @since 2.0.0
  * @access private
  */
@@ -105,6 +106,7 @@ function _register_network_admin_menu() {
 /**
  * Registers the single-site menu.
  *
+ * @hook admin_menu 10
  * @since 2.0.0
  * @access private
  */
@@ -124,6 +126,7 @@ function _register_admin_menu() {
 /**
  * Initializes all that's necessary for the admin page.
  *
+ * @hook load-settings_page_pro-mime-types 10
  * @since 2.0.0
  * @access private
  */
@@ -145,7 +148,7 @@ function _init_admin_page() {
 
 	\add_action(
 		'admin_enqueue_scripts',
-		function() {
+		function () {
 			$dir_url = \plugin_dir_url( \Pro_Mime_Types\PLUGIN_BASE_FILE );
 			$min     = \defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
@@ -169,6 +172,8 @@ function _init_admin_page() {
 /**
  * Outputs the administrative page.
  *
+ * @see _register_admin_menu()
+ * @see _register_network_admin_menu()
  * @since 2.0.0
  * @access private
  */
@@ -179,6 +184,7 @@ function _display_admin_page() {
 /**
  * Outputs the administrative page tab content.
  *
+ * @hook pmt_admin_tab_content 10
  * @since 2.0.0
  * @access private
  *
@@ -197,6 +203,7 @@ function _output_tab_content( $current_tab ) {
 /**
  * Processes settings submission, and redirects user back to admin page.
  *
+ * @hook admin_post_pmt_save_settings 10
  * @since 2.0.0
  * @access private
  */
@@ -237,6 +244,7 @@ function _process_settings_submission() {
 /**
  * Adds various links to the plugin row on the plugin's screen.
  *
+ * @hook plugin_action_links_pro-mime-types/promimetypes.php
  * @since 2.1.0
  * @access private
  *
@@ -263,6 +271,7 @@ function _add_plugin_action_links( $links ) {
 /**
  * Adds various links to the plugin row on the plugin's screen.
  *
+ * @hook network_admin_plugin_action_links_pro-mime-types/promimetypes.php
  * @since 2.1.0
  * @access private
  *

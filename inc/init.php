@@ -31,6 +31,7 @@ use function \Pro_Mime_Types\get_allowed_mime_types_settings;
 /**
  * Registers unrecognized MIME types for WordPress to interpret.
  *
+ * @hook mime_types 10
  * @since 2.0.0
  * @access private
  *
@@ -58,6 +59,7 @@ function _register_mime_types( $mime_types ) {
  *    1. This would force us to upgrade the options (set minimum `upload_files` capability).
  *    2. Populate the second parameter to get a $user object.
  *
+ * @hook upload_mimes 10
  * @since 2.0.0
  *
  * @param array $t Mime types keyed by the file extension regex corresponding to those types.
@@ -88,6 +90,7 @@ function _register_allowed_upload_mimes( $t = [] ) {
 /**
  * Registers extra types for WordPress to recognize handling image sizes.
  *
+ * @hook getimagesize_mimes_to_exts 10
  * @since 2.0.0
  * @access private
  *
@@ -119,6 +122,7 @@ function _register_all_imagesize_extensions( $mime_to_ext ) {
 /**
  * Registers extra types for WordPress to recognize handling video files.
  *
+ * @hook wp_video_extensions 10
  * @since 2.0.0
  * @access private
  *
@@ -148,6 +152,7 @@ function _register_all_video_extensions( $extensions ) {
 /**
  * Registers extra types for WordPress to recognize handling audio files.
  *
+ * @hook wp_audio_extensions 10
  * @since 2.0.0
  * @access private
  *
@@ -177,6 +182,7 @@ function _register_all_audio_extensions( $extensions ) {
 /**
  * Registers extra extensions for WordPress to recognize.
  *
+ * @hook ext2type 10
  * @since 2.0.0
  * @access private
  *
@@ -201,6 +207,7 @@ function _register_ext2type( $ext2type ) {
 /**
  * Registers extra types for WordPress to filter in the media library.
  *
+ * @hook post_mime_types 10
  * @since 2.0.0
  * @access private
  * @see get_post_mime_types
@@ -338,6 +345,7 @@ function _register_post_mime_types( $post_mime_types ) {
 /**
  * Filters the "real" file type of the given file.
  *
+ * @hook wp_check_filetype_and_ext 10
  * @since 2.0.0
  * @access private
  * @see wp_check_filetype_and_ext(), this function replicates its behavior.
@@ -362,7 +370,7 @@ function _allow_real_filetype_and_ext( $wp_check_filetype_and_ext, $file, $filen
 	$proper_filename = $wp_check_filetype_and_ext['proper_filename'];
 
 	if (
-		( $ext && $type ) // Already passed.
+		   ( $ext && $type ) // Already passed.
 		|| ( ! $real_mime || ! \is_string( $real_mime ) ) // Unsupported mime check.
 	) return compact( 'ext', 'type', 'proper_filename' );
 
