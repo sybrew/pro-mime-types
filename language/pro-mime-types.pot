@@ -1,15 +1,15 @@
-# Copyright (C) 2023 - 2024 Sybre Waaijer
+# Copyright (C) 2024 Sybre Waaijer
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: Pro Mime Types - Manage file media types 2.0.1\n"
+"Project-Id-Version: Pro Mime Types - Manage file media types 2.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/pro-mime-types\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-08-08T15:06:49+00:00\n"
+"POT-Creation-Date: 2024-04-03T08:48:03+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: pro-mime-types\n"
@@ -34,100 +34,105 @@ msgstr ""
 msgid "https://cyberwire.nl/"
 msgstr ""
 
-#: inc/admin.php:197
+#: inc/admin.php:219
 msgid "Sorry, you are not allowed to update Pro Mime Types settings."
 msgstr ""
 
-#: inc/init.php:266
+#: inc/admin.php:266
+#: inc/admin.php:291
+msgid "Settings"
+msgstr ""
+
+#: inc/init.php:254
 msgctxt "file type group"
 msgid "Text"
 msgstr ""
 
-#: inc/init.php:267
+#: inc/init.php:255
 msgid "Manage Text"
 msgstr ""
 
 #. translators: %s: Number of text files.
-#: inc/init.php:269
+#: inc/init.php:257
 msgid "Text <span class=\"count\">(%s)</span>"
 msgid_plural "Text <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/init.php:286
+#: inc/init.php:274
 msgctxt "file type group"
 msgid "Code"
 msgstr ""
 
-#: inc/init.php:287
+#: inc/init.php:275
 msgid "Manage Code"
 msgstr ""
 
 #. translators: %s: Number of code files.
-#: inc/init.php:289
+#: inc/init.php:277
 msgid "Code <span class=\"count\">(%s)</span>"
 msgid_plural "Code <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/init.php:296
+#: inc/init.php:284
 msgctxt "file type group"
 msgid "Miscellaneous"
 msgstr ""
 
-#: inc/init.php:297
+#: inc/init.php:285
 msgid "Manage Miscellaneous"
 msgstr ""
 
 #. translators: %s: Number of miscellaneous files.
-#: inc/init.php:299
+#: inc/init.php:287
 msgid "Miscellaneous <span class=\"count\">(%s)</span>"
 msgid_plural "Miscellaneous <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: promimetypes.php:178
+#: promimetypes.php:243
 msgid "XML file formats can be executed by the browser when interpreted in HTML."
 msgstr ""
 
-#: promimetypes.php:179
+#: promimetypes.php:244
 msgid "Can contain macros which office software may execute."
 msgstr ""
 
-#: promimetypes.php:180
+#: promimetypes.php:245
 msgid "Compressed file format, can contain unwanted stuff."
 msgstr ""
 
-#: promimetypes.php:211
+#: promimetypes.php:285
 msgid "XML file formats can be executed by the browser when interpreted in HTML. SVG is always interpreted in HTML."
 msgstr ""
 
-#: promimetypes.php:255
+#: promimetypes.php:330
 msgid "Can exploit vulnerabilities when opened in browsers."
 msgstr ""
 
-#: promimetypes.php:301
+#: promimetypes.php:376
 msgid "Compressed file format, can contain unwanted stuff. Executes in browser."
 msgstr ""
 
-#: promimetypes.php:308
+#: promimetypes.php:382
 msgid "CSS can import external resources in the browser."
 msgstr ""
 
-#: promimetypes.php:310
+#: promimetypes.php:384
 msgid "Can run in iframes through shortcodes. Can import javascript. Can import CSS."
 msgstr ""
 
-#: promimetypes.php:311
+#: promimetypes.php:385
 msgid "Can execute code in browser."
 msgstr ""
 
-#: promimetypes.php:316
-msgid "Can be executed by some servers."
+#: promimetypes.php:391
+msgid "Can install unwanted software."
 msgstr ""
 
-#: promimetypes.php:317
-msgid "Can install unwanted software."
+#: promimetypes.php:392
+msgid "Can be executed by some servers."
 msgstr ""
 
 #: views/admin.php:46
@@ -158,65 +163,65 @@ msgstr ""
 msgid "No settings were changed."
 msgstr ""
 
-#: views/tab-allowed-types.php:40
+#: views/tab-allowed-types.php:37
 msgid "Currently allowed MIME types"
 msgstr ""
 
-#: views/tab-allowed-types.php:43
+#: views/tab-allowed-types.php:40
 msgid "Another plugin or theme may influence MIME type support. In the lists below you can inspect if this is happening."
 msgstr ""
 
-#: views/tab-allowed-types.php:47
+#: views/tab-allowed-types.php:44
 msgid "The assumed safety listed considers how likely a file can be used in nefarious ways."
 msgstr ""
 
-#: views/tab-allowed-types.php:63
+#: views/tab-allowed-types.php:59
 #: views/tab-options.php:100
 msgid "File Extensions"
 msgstr ""
 
-#: views/tab-allowed-types.php:64
+#: views/tab-allowed-types.php:60
 #: views/tab-options.php:101
 msgid "MIME type"
 msgstr ""
 
-#: views/tab-allowed-types.php:65
+#: views/tab-allowed-types.php:61
 msgid "Assumed safety"
 msgstr ""
 
-#: views/tab-allowed-types.php:68
-#: views/tab-options.php:107
+#: views/tab-allowed-types.php:64
+#: views/tab-options.php:103
 msgid "This MIME type is considered safe for uploading."
 msgstr ""
 
-#: views/tab-allowed-types.php:80
+#: views/tab-allowed-types.php:76
 msgid "Allowed via Pro Mime Types"
 msgstr ""
 
-#: views/tab-allowed-types.php:93
-#: views/tab-allowed-types.php:167
+#: views/tab-allowed-types.php:89
+#: views/tab-allowed-types.php:163
 msgid "No allowed MIME types found."
 msgstr ""
 
 #. translators: %s = File extension
-#: views/tab-allowed-types.php:108
+#: views/tab-allowed-types.php:104
 msgid "Removed support: %s"
 msgstr ""
 
-#: views/tab-allowed-types.php:111
+#: views/tab-allowed-types.php:107
 msgid "Unregistered MIME type!"
 msgstr ""
 
-#: views/tab-allowed-types.php:154
+#: views/tab-allowed-types.php:150
 msgid "Allowed via other software"
 msgstr ""
 
 #. translators: %s = File extension
-#: views/tab-allowed-types.php:182
+#: views/tab-allowed-types.php:178
 msgid "Unregistered: %s"
 msgstr ""
 
-#: views/tab-allowed-types.php:185
+#: views/tab-allowed-types.php:181
 msgid "Unregistered MIME type."
 msgstr ""
 
@@ -293,10 +298,10 @@ msgctxt "Table header: Allow file uploading"
 msgid "Upload"
 msgstr ""
 
-#: views/tab-options.php:159
+#: views/tab-options.php:157
 msgid "Allow"
 msgstr ""
 
-#: views/tab-options.php:162
+#: views/tab-options.php:160
 msgid "Disallow"
 msgstr ""
