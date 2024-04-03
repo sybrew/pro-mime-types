@@ -3,7 +3,7 @@ Contributors: Cybr
 Donate link: https://github.com/sponsors/sybrew
 Tags: attachment, image, mime types, upload, multisite
 Requires at least: 5.3
-Tested up to: 6.2
+Tested up to: 6.5
 Requires PHP: 7.4.0
 Stable tag: 2.1.0
 License: GPLv3
@@ -63,16 +63,16 @@ If you find an issue, please open a [support topic](https://wordpress.org/suppor
 
 = 2.1.0 =
 
-* Upgrade: The stored settings will now convert from regex-based to key-based. This allows adding new types and adjusting existing regexes via the filter much more reliably.
+* Upgrade: The stored settings will now convert from regex-based to key-based. This allows new types to be added and existing regexes to be adjusted much more reliably via the filter.
 	* This changes the return value of function `Pro_Mime_Types\get_allowed_mime_types_settings()`. Since the value is useable in the same manner as before, we didn't change or deprecate the function name.
-* Added: AVIF is now supported (`image/avif`, extensions `avif` or `avifs`). You require WP 6.5 or later to prevent corruption of the upload.
+* Added: AVIF is now supported (`image/avif`, extensions `avif` or `avifs`). The site requires WP 6.5 or later to make the upload editable -- however, WP 6.5 has various bugs with this.
 * Added: The settings link has been added to Pro Mime Types's listing on the plugin activation page.
-	* In network mode, only the network administrator will see this and it will be accessible from any subsite.
-* Added: Pro Mime Types now registers the current "database version" in option `pro_mime_types_db_version`, separately for networks and single-site activations (depending on how it's activated). This makes upgrading the options possible over time.
-* Changed: constant `Pro_Mime_Types\SUPPORTED_MIME_TYPES` is now an associative array (with index keys), instead of a sequential one.
-	* Filter `pmt_supported_mime_types` is directly affected by this change, but using sequential values is still possible, though they may not be stored properly.
-* Fixed: .exe is now assigned the MIME type PHP recognizes, instead of what Windows does.
-* Fixed: When setting the plugin to single-site mode, from network-mode, the plugin's network options are no longer cleared.
+	* Only the network administrator will see this in network mode, conveniently accessible from any subsite.
+* Added: Pro Mime Types now registers the current "database version" in option `pro_mime_types_db_version`, separately for networks and single-site activations (depending on how it's activated). This option allows for upgrading the settings over time.
+* Changed: constant `Pro_Mime_Types\SUPPORTED_MIME_TYPES` is now an associative array (with index keys) instead of a sequential one.
+	* This change directly affects filter `pmt_supported_mime_types`, but sequential values can still be used, though they may not be stored properly.
+* Fixed: .exe is now assigned the MIME type PHP recognizes instead of the one Windows does.
+* Fixed: When setting the plugin to single-site mode from network mode, the plugin's network options are no longer cleared.
 
 = 2.0.1 =
 

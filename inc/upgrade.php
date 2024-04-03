@@ -156,7 +156,7 @@ function _register_or_migrate_settings() {
 	\wp_cache_flush();
 	\wp_cache_delete( 'alloptions', 'options' );
 
-	$supported_extensions = [];
+	$old_supported_regex = [];
 
 	// We used to separate storage based on site mode, rather than plugin activation mode.
 	if ( \is_multisite() ) {
@@ -171,7 +171,7 @@ function _register_or_migrate_settings() {
 			foreach ( $old_results as $row ) {
 				switch ( $row->meta_value ) { // Either 2 or 1; disallowed and allowed.
 					case 1: // Allowed.
-						$supported_extensions[] = str_replace( 'pmt_mime_type_', '', $row->meta_key );
+						$old_supported_regex[] = str_replace( 'pmt_mime_type_', '', $row->meta_key );
 						// Ignore all other settings.
 				}
 			}
@@ -188,15 +188,37 @@ function _register_or_migrate_settings() {
 			foreach ( $old_results as $row ) {
 				switch ( $row->option_value ) { // Either 2 or 1; disallowed and allowed.
 					case 1: // Allowed.
-						$supported_extensions[] = str_replace( 'pmt_mime_type_', '', $row->option_name );
+						$old_supported_regex[] = str_replace( 'pmt_mime_type_', '', $row->option_name );
 						// Ignore all other settings.
 				}
 			}
 		}
 	}
 
-	if ( ! $old_results ) {
-		// Register.
+	if ( $old_results ) {
+		// Migrate from < 2.0
+		foreach (
+			[
+				'jpg|jpeg|jpe' => 'jpg|jpeg|jpe|jif|jfif',
+				'mp3|m4a|m4b'  => 'mp1|mp2|mp3|m3a|m4a|m4b',
+				'ogv'          => 'ogv|ogm',
+			]
+			as $old => $new
+		) {
+			if ( \in_array( $old, $old_supported_regex, true ) ) {
+				// It'd be faster if we'd collect the "$old", and then perform an array_diff... oh well.
+				$old_supported_regex   = array_diff( $old_supported_regex, [ $old ] );
+				$old_supported_regex[] = $new;
+			}
+		}
+
+		// SWF and FLV are long gone. Let's stop recognizing them.
+		$old_supported_regex = array_diff( $old_supported_regex, [ 'swf', 'flv' ] );
+
+		// Convert extensions to 2.1+
+		$supported_types = _update_extension_regexes_to_mime_type_options( $old_supported_regex );
+	} else {
+		// Register new installation.
 		$supported_types = [];
 
 		// Extract to reduce array access opcodes in loop.
@@ -208,31 +230,8 @@ function _register_or_migrate_settings() {
 				$supported_types[] = $option;
 
 		$supported_types = implode( ',', $supported_types );
-	} else {
-		// Migrate from < 2.0
-		foreach (
-			[
-				'jpg|jpeg|jpe' => 'jpg|jpeg|jpe|jif|jfif',
-				'mp3|m4a|m4b'  => 'mp1|mp2|mp3|m3a|m4a|m4b',
-				'ogv'          => 'ogv|ogm',
-			]
-			as $old => $new
-		) {
-			if ( \in_array( $old, $supported_extensions, true ) ) {
-				// It'd be faster if we'd collect the "$old", and then perform an array_diff... oh well.
-				$supported_extensions   = array_diff( $supported_extensions, [ $old ] );
-				$supported_extensions[] = $new;
-			}
-		}
-
-		// SWF and FLV are long gone. Let's stop recognizing it.
-		$supported_extensions = array_diff( $supported_extensions, [ 'swf', 'flv' ] );
-
-		// Convert extensions to 2.1+
-		$supported_types = _update_extension_regexes_to_mime_type_options( $supported_extensions );
 	}
 
-	// Migrate;
 	$success = is_network_mode()
 		? \update_site_option( ALLOWED_MIME_TYPES_OPTIONS_NAME, $supported_types )
 		: \update_option( ALLOWED_MIME_TYPES_OPTIONS_NAME, $supported_types );
@@ -242,7 +241,7 @@ function _register_or_migrate_settings() {
 		return false;
 
 	// Delete old options, if any.
-	if ( ! empty( $old_results ) ) {
+	if ( $old_results ) {
 		$wpdb->query(
 			$wpdb->prepare(
 				"DELETE FROM {$wpdb->sitemeta} WHERE meta_key LIKE %s",
@@ -341,7 +340,7 @@ function _update_extension_regexes_to_mime_type_options( $extension_regexes ) {
 
 	$supported_types = [];
 
-	// This extracts SUPPORTED_MIME_TYPES to becomes [ 'avif' => 'avif|avifs', 'bpm' => 'bmp', ... ]
+	// This extracts SUPPORTED_MIME_TYPES to become [ 'avif' => 'avif|avifs', 'bpm' => 'bmp', ... ]
 	$options = array_combine(
 		array_keys( SUPPORTED_MIME_TYPES ),
 		array_column( SUPPORTED_MIME_TYPES, 0 ),

@@ -12,7 +12,7 @@
  * Plugin Name: Pro Mime Types - Manage file media types
  * Plugin URI: https://wordpress.org/plugins/pro-mime-types/
  * Description: Enable or block MIME types and file extensions for media / file / attachment uploads through a nifty (network) admin menu.
- * Version: 2.1.0-dev-4
+ * Version: 2.1.0
  * Author: Sybre Waaijer
  * Author URI: https://cyberwire.nl/
  * License: GPLv3
