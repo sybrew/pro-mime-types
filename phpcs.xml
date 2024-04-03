@@ -11,7 +11,7 @@
 
 	<rule ref="TSF.Performance.Opcodes">
 		<properties>
-			<property name="userNoopChecks" type="array" value="get_allowed_mime_types_settings,_plugin_init,is_network_mode,_register_or_upgrade_settings,_define_supported_mime_types,_release_upgrade_lock,_set_upgrade_lock,_current_user_can_manage_settings,_bind_admin_hook"/>
+			<property name="userNoopChecks" type="array" value="is_network_mode,get_db_version,get_allowed_mime_types_regexes,get_allowed_mime_types_settings,_register_or_upgrade_settings,_define_supported_mime_types,_release_upgrade_lock,_set_upgrade_lock,_current_user_can_manage_settings,_bind_admin_hook,_register_or_migrate_settings,_upgrade_settings,_update_extension_regexes_to_mime_type_options"/>
 		</properties>
 	</rule>
 

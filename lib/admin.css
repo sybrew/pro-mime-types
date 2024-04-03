@@ -16,6 +16,14 @@
  */
 
 /**
+ * Suppress nags.
+ */
+#update-nag,
+.update-nag {
+	display: none;
+}
+
+/**
  * Most of the styles below are repurposed from WordPress's Privacy and Health pages.
  *
  * The tooltips are largely sourced from The SEO Framework plugin.

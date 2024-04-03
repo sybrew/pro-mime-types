@@ -9,13 +9,13 @@ namespace Pro_Mime_Types\Admin\Views;
 
 \defined( 'Pro_Mime_Types\PLUGIN_BASE_FILE' ) or die;
 
-use function \Pro_Mime_Types\is_network_mode;
-
 use const \Pro_Mime_Types\{
 	MIME_DANGER_LEVEL,
 	Admin\PAGE_HOOK,
 	Admin\SAVED_RESPONSE,
 };
+
+use function \Pro_Mime_Types\is_network_mode;
 
 /**
  * Pro Mime Types plugin

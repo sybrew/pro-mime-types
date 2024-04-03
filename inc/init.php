@@ -62,29 +62,10 @@ function _register_mime_types( $mime_types ) {
  * @hook upload_mimes 10
  * @since 2.0.0
  *
- * @param array $t Mime types keyed by the file extension regex corresponding to those types.
- * @return array The MIME types.
+ * @return array MIME types keyed by the file extension regex corresponding to those types.
  */
-function _register_allowed_upload_mimes( $t = [] ) {
-
-	// Reset.
-	$t = [];
-
-	// This creates [ 'jpg|jpeg|jpe' => 'image/jpeg' ], aka [ extension_regex => mime ];
-	$mimes = array_column( SUPPORTED_MIME_TYPES, 1, 0 );
-
-	foreach (
-		explode(
-			',',
-			get_allowed_mime_types_settings()
-		)
-		as $extension_regex
-	) {
-		if ( isset( $mimes[ $extension_regex ] ) )
-			$t[ $extension_regex ] = $mimes[ $extension_regex ];
-	}
-
-	return $t;
+function _register_allowed_upload_mimes() {
+	return \Pro_Mime_Types\get_allowed_mime_types();
 }
 
 /**
@@ -378,7 +359,7 @@ function _allow_real_filetype_and_ext( $wp_check_filetype_and_ext, $file, $filen
 	$ext  = false;
 	$type = false;
 
-	$allowed = \get_allowed_mime_types();
+	$allowed = \Pro_Mime_Types\get_allowed_mime_types();
 
 	if ( \str_starts_with( $real_mime, 'text/' ) ) {
 		// Get all mime types of type text and code; these are assumed plaintext by PHP ($real_mime).
@@ -390,8 +371,8 @@ function _allow_real_filetype_and_ext( $wp_check_filetype_and_ext, $file, $filen
 			array_intersect(
 				// This creates [ 'jpg|jpeg|jpe' => 'image' ], aka [ extension_regex => type ];
 				array_column( SUPPORTED_MIME_TYPES, 4, 0 ),
-				[ 'text', 'code' ]
-			)
+				[ 'text', 'code' ],
+			),
 		);
 
 		foreach ( $text_and_code_mimes as $extension_regex => $mime_type )
@@ -414,8 +395,6 @@ function _allow_real_filetype_and_ext( $wp_check_filetype_and_ext, $file, $filen
 				'heic|heif' => 'image/heic',
 			];
 		}
-		// Candidates, '$ext', 'realmime'
-		// 'class', 'application/java'
 
 		if ( isset( $assumed_extension_and_mimes ) ) {
 			// Redo basic extension validation and MIME mapping.

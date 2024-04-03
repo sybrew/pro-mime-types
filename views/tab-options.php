@@ -9,17 +9,17 @@ namespace Pro_Mime_Types\Admin\Views;
 
 \defined( 'Pro_Mime_Types\PLUGIN_BASE_FILE' ) or die;
 
-use function \Pro_Mime_Types\{
-	is_network_mode,
-	get_allowed_mime_types_settings
-};
-
 use const \Pro_Mime_Types\{
 	Admin\SAVE_NONCE,
 	Admin\SAVE_ACTION,
 	MIME_DANGER_LEVEL,
 	SUPPORTED_MIME_TYPES,
 	ALLOWED_MIME_TYPES_OPTIONS_NAME,
+};
+
+use function \Pro_Mime_Types\{
+	is_network_mode,
+	get_allowed_mime_types_settings,
 };
 
 /**
@@ -85,28 +85,26 @@ use const \Pro_Mime_Types\{
 	foreach ( $supported_mime_types as [ $_er, $_mime, $_danger, $_comment, &$_type ] )
 		$_type = \array_key_exists( $_type, $mime_type_titles ) ? $_type : 'other';
 
-	// Now sort by $mime_type_titles' order. This makes an sequential array of the keys.
+	// Now sort by $mime_type_titles' order.
 	$mime_type_titles_key_order = array_flip( array_keys( $mime_type_titles ) );
-	usort(
+	uasort(
 		$supported_mime_types,
 		fn( $a, $b ) => $mime_type_titles_key_order[ $a[4] ] <=> $mime_type_titles_key_order[ $b[4] ]
 	);
 
-	// This creates: [ 0 => $extension_regex, 1 => $extension_regex, etc. ]
-	$currently_allowed_mime_type_list = explode( ',', get_allowed_mime_types_settings() );
+	// This creates [ 'option_key' => index ] for faster parsing.
+	$currently_allowed_mime_type_options = array_flip( get_allowed_mime_types_settings( true ) );
 
 	$header_translations = [
 		'upload'    => \_x( 'Upload', 'Table header: Allow file uploading', 'pro-mime-types' ),
 		'file-ext'  => \__( 'File Extensions', 'pro-mime-types' ),
 		'mime-type' => \__( 'MIME type', 'pro-mime-types' ),
 	];
+	$i18n_assumed_safe   = \__( 'This MIME type is considered safe for uploading.', 'pro-mime-types' );
 
-	$get_option_name = fn( $extension_regex ) => ALLOWED_MIME_TYPES_OPTIONS_NAME . "[$extension_regex]";
-	$previous_type   = '';
+	$previous_type = '';
 
-	$i18n_assumed_safe = \__( 'This MIME type is considered safe for uploading.', 'pro-mime-types' );
-
-	foreach ( $supported_mime_types as [ $extension_regex, $mime, $danger, $comment, $type ] ) {
+	foreach ( $supported_mime_types as $option_name => [ $extension_regex, $mime, $danger, $comment, $type ] ) {
 		if ( $type !== $previous_type ) {
 			if ( $previous_type ) {
 				// Close last opened.
@@ -149,12 +147,12 @@ use const \Pro_Mime_Types\{
 				$dashicon = 'dashicons-dismiss';
 		}
 
-		$currently_allowed = \in_array( $extension_regex, $currently_allowed_mime_type_list, true );
-		$option_name       = $get_option_name( $extension_regex );
+		$currently_allowed = isset( $currently_allowed_mime_type_options[ $option_name ] );
+		$option_field      = ALLOWED_MIME_TYPES_OPTIONS_NAME . "[$option_name]";
 		?>
 		<tr>
 			<td data-colname="<?= \esc_attr( $header_translations['upload'] ) ?>" data-select=true>
-				<select name="<?= \esc_attr( $option_name ) ?>">
+				<select name="<?= \esc_attr( $option_field ) ?>">
 					<option value=1 <?php \selected( $currently_allowed, true ); ?>>
 						<?= \esc_html__( 'Allow', 'pro-mime-types' ) ?>
 					</option>
@@ -165,7 +163,7 @@ use const \Pro_Mime_Types\{
 				<span class=pmt-warning data-pmt-tooltip="<?= \esc_attr( $comment ?: $i18n_assumed_safe ) ?>"><span class="dashicons <?= \esc_attr( $dashicon ) ?>"></span></span>
 			</td>
 			<td data-colname="<?= \esc_attr( $header_translations['file-ext'] ) ?>">
-				<label for="<?= \esc_attr( $option_name ) ?>">
+				<label for="<?= \esc_attr( $option_field ) ?>">
 					<?= \esc_html( str_replace( '|', ', ', $extension_regex ) ) ?>
 				</label>
 			</td>

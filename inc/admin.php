@@ -7,9 +7,12 @@ namespace Pro_Mime_Types\Admin;
 
 \defined( 'Pro_Mime_Types\VERSION' ) or die;
 
-use function \Pro_Mime_Types\is_network_mode;
+use const \Pro_Mime_Types\{
+	ALLOWED_MIME_TYPES_OPTIONS_NAME,
+	PLUGIN_DIR_PATH,
+};
 
-use const \Pro_Mime_Types\ALLOWED_MIME_TYPES_OPTIONS_NAME;
+use function \Pro_Mime_Types\is_network_mode;
 
 /**
  * Pro Mime Types plugin
@@ -178,7 +181,7 @@ function _init_admin_page() {
  * @access private
  */
 function _display_admin_page() {
-	include \Pro_Mime_Types\PLUGIN_DIR_PATH . 'views/admin.php';
+	include PLUGIN_DIR_PATH . 'views/admin.php';
 }
 
 /**
@@ -193,10 +196,10 @@ function _display_admin_page() {
 function _output_tab_content( $current_tab ) {
 	switch ( $current_tab ) {
 		case '':
-			include \Pro_Mime_Types\PLUGIN_DIR_PATH . 'views/tab-options.php';
+			include PLUGIN_DIR_PATH . 'views/tab-options.php';
 			break;
 		case 'allowed-types':
-			include \Pro_Mime_Types\PLUGIN_DIR_PATH . 'views/tab-allowed-types.php';
+			include PLUGIN_DIR_PATH . 'views/tab-allowed-types.php';
 	}
 }
 

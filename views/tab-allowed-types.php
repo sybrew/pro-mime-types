@@ -9,15 +9,12 @@ namespace Pro_Mime_Types\Admin\Views;
 
 \defined( 'Pro_Mime_Types\PLUGIN_BASE_FILE' ) or die;
 
-use function \Pro_Mime_Types\{
-	get_allowed_mime_types_settings,
-	Admin\_get_mime_type_section_titles,
-};
-
 use const \Pro_Mime_Types\{
 	MIME_DANGER_LEVEL,
 	SUPPORTED_MIME_TYPES,
 };
+
+use function \Pro_Mime_Types\Admin\_get_mime_type_section_titles;
 
 /**
  * Pro Mime Types plugin
@@ -52,11 +49,10 @@ use const \Pro_Mime_Types\{
 <?php
 
 // This is [ $extension_regex => $mime ]
-$mime_type_allowed = \get_allowed_mime_types();
-// This is [ $extension_regex => sequential int from array ]
-$mime_type_settings = array_flip( explode( ',', get_allowed_mime_types_settings() ) );
+$mime_type_allowed          = \get_allowed_mime_types();
+$mime_type_settings_regexes = \Pro_Mime_Types\get_allowed_mime_types();
 
-$intended_allowed_mime_types   = array_intersect_key( $mime_type_settings, $mime_type_allowed );
+$intended_allowed_mime_types   = array_intersect_key( $mime_type_settings_regexes, $mime_type_allowed );
 $extraneous_allowed_mime_types = array_diff_key( $mime_type_allowed, $intended_allowed_mime_types );
 
 $header_translations = [

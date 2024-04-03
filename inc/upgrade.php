@@ -7,12 +7,18 @@ namespace Pro_Mime_Types\Upgrade;
 
 \defined( 'Pro_Mime_Types\VERSION' ) or die;
 
-use function \Pro_Mime_Types\is_network_mode;
-
 use const \Pro_Mime_Types\{
-	MIME_DANGER_LEVEL,
 	ALLOWED_MIME_TYPES_OPTIONS_NAME,
+	DB_VERSION,
+	DB_VERSION_OPTION_NAME,
+	MIME_DANGER_LEVEL,
 	SUPPORTED_MIME_TYPES,
+};
+
+use function \Pro_Mime_Types\{
+	get_allowed_mime_types_settings,
+	get_db_version,
+	is_network_mode,
 };
 
 /**
@@ -39,12 +45,10 @@ const UPGRADE_LOCK_OPTION_NAME = 'pmt_upgrade.lock';
  *
  * @since 2.0.0
  * @access private
- * @global WPDB $wpdb
  *
  * @return bool True when done, false when locked.
  */
 function _register_or_upgrade_settings() {
-	global $wpdb;
 
 	$timeout = 5 * \MINUTE_IN_SECONDS; // Same as WP Core, function update_core().
 
@@ -60,15 +64,101 @@ function _register_or_upgrade_settings() {
 	if ( 0 !== $ini_max_execution_time )
 		set_time_limit( max( $ini_max_execution_time, $timeout ) );
 
-	// Delete options; $success may in an unpredicted event return false otherwise.
-	\delete_option( ALLOWED_MIME_TYPES_OPTIONS_NAME );
-	\delete_site_option( ALLOWED_MIME_TYPES_OPTIONS_NAME );
+	// Get unaltered settings.
+	$settings = is_network_mode()
+		? \get_site_option( ALLOWED_MIME_TYPES_OPTIONS_NAME )
+		: \get_option( ALLOWED_MIME_TYPES_OPTIONS_NAME );
 
+	$success = false !== $settings
+		? _upgrade_settings()
+		: _register_or_migrate_settings(); // Register or migrate from < 2.0
+
+	_release_upgrade_lock();
+
+	/**
+	 * Clear the cache to prevent a get_option() from retrieving a stale database version to the cache.
+	 * Not all caching plugins recognize 'flush', so delete the options cache too, just to be safe.
+	 *
+	 * @see WordPress's `.../update-core.php`
+	 */
+	\wp_cache_flush();
+	\wp_cache_delete( 'alloptions', 'options' );
+
+	return $success;
+}
+
+/**
+ * Upgrades the settings.
+ *
+ * @since 2.1.0
+ * @access private
+ *
+ * @return bool True when done, false on failure.
+ */
+function _upgrade_settings() {
+
+	/**
+	 * Clear the cache to prevent an update_option() from saving a stale database version to the cache.
+	 * Not all caching plugins recognize 'flush', so delete the options cache too, just to be safe.
+	 *
+	 * @see WordPress's `.../update-core.php`
+	 */
+	\wp_cache_flush();
+	\wp_cache_delete( 'alloptions', 'options' );
+
+	$current_version = get_db_version();
+
+	switch ( true ) {
+		case $current_version < 2100:
+			// Convert from 2.0 to 2.1+; gets automaticlly from either network mode or single site.
+			$supported_types = _update_extension_regexes_to_mime_type_options( get_allowed_mime_types_settings( true ) );
+
+			// Migrate
+			$success = is_network_mode()
+				? \update_site_option( ALLOWED_MIME_TYPES_OPTIONS_NAME, $supported_types )
+				: \update_option( ALLOWED_MIME_TYPES_OPTIONS_NAME, $supported_types );
+
+			if ( ! $success ) break;
+			// Pass through
+
+		case true:
+			$success = is_network_mode()
+				? \update_site_option( DB_VERSION_OPTION_NAME, DB_VERSION )
+				: \update_option( DB_VERSION_OPTION_NAME, DB_VERSION );
+	}
+
+	return $success ?? false;
+}
+
+/**
+ * Registers or migrates the settings from Pro Mime Types 2.0 and earlier.
+ *
+ * @since 2.1.0
+ * @access private
+ * @global WPDB $wpdb
+ *
+ * @return bool True when done, false on failure.
+ */
+function _register_or_migrate_settings() {
+	global $wpdb;
+
+	// Delete options; $success may, in an unpredicted event, return false otherwise.
+	is_network_mode()
+		? \delete_site_option( ALLOWED_MIME_TYPES_OPTIONS_NAME )
+		: \delete_option( ALLOWED_MIME_TYPES_OPTIONS_NAME );
+
+	/**
+	 * Clear the cache to prevent an update_option() from saving a stale database version to the cache.
+	 * Not all caching plugins recognize 'flush', so delete the options cache too, just to be safe.
+	 *
+	 * @see WordPress's `.../update-core.php`
+	 */
 	\wp_cache_flush();
 	\wp_cache_delete( 'alloptions', 'options' );
 
 	$supported_extensions = [];
 
+	// We used to separate storage based on site mode, rather than plugin activation mode.
 	if ( \is_multisite() ) {
 		$old_results = $wpdb->get_results(
 			$wpdb->prepare(
@@ -106,12 +196,20 @@ function _register_or_upgrade_settings() {
 	}
 
 	if ( ! $old_results ) {
-		// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- unpack list.
-		foreach ( SUPPORTED_MIME_TYPES as [ $extension_regex, $mime, $danger ] )
-			if ( MIME_DANGER_LEVEL['safe'] === $danger )
-				$supported_extensions[] = $extension_regex;
+		// Register.
+		$supported_types = [];
+
+		// Extract to reduce array access opcodes in loop.
+		$safe = MIME_DANGER_LEVEL['safe'];
+
+		// SUPPORTED_MIME_TYPES: extension_regex, mime, danger, comment, type
+		foreach ( SUPPORTED_MIME_TYPES as $option => [ , , $danger ] )
+			if ( $safe === $danger )
+				$supported_types[] = $option;
+
+		$supported_types = implode( ',', $supported_types );
 	} else {
-		// Migrate from old extension regex to new extension regex.
+		// Migrate from < 2.0
 		foreach (
 			[
 				'jpg|jpeg|jpe' => 'jpg|jpeg|jpe|jif|jfif',
@@ -126,18 +224,22 @@ function _register_or_upgrade_settings() {
 				$supported_extensions[] = $new;
 			}
 		}
-	}
 
-	// SWF and FLV are long gone. Let's stop recognizing it.
-	$supported_extensions = array_diff( $supported_extensions, [ 'swf', 'flv' ] );
+		// SWF and FLV are long gone. Let's stop recognizing it.
+		$supported_extensions = array_diff( $supported_extensions, [ 'swf', 'flv' ] );
+
+		// Convert extensions to 2.1+
+		$supported_types = _update_extension_regexes_to_mime_type_options( $supported_extensions );
+	}
 
 	// Migrate;
 	$success = is_network_mode()
-		? \update_site_option( ALLOWED_MIME_TYPES_OPTIONS_NAME, implode( ',', $supported_extensions ) )
-		: \update_option( ALLOWED_MIME_TYPES_OPTIONS_NAME, implode( ',', $supported_extensions ) );
+		? \update_site_option( ALLOWED_MIME_TYPES_OPTIONS_NAME, $supported_types )
+		: \update_option( ALLOWED_MIME_TYPES_OPTIONS_NAME, $supported_types );
 
 	// Try again later. Don't warn user -- the plugin will simply be unavailable.
-	if ( ! $success ) return false;
+	if ( ! $success )
+		return false;
 
 	// Delete old options, if any.
 	if ( ! empty( $old_results ) ) {
@@ -154,17 +256,6 @@ function _register_or_upgrade_settings() {
 			)
 		);
 	}
-
-	_release_upgrade_lock();
-
-	/**
-	 * Clear the cache to prevent a get_option() from retrieving a stale database version to the cache.
-	 * Not all caching plugins recognize 'flush', so delete the options cache too, just to be safe.
-	 *
-	 * @see WordPress's `.../update-core.php`
-	 */
-	\wp_cache_flush();
-	\wp_cache_delete( 'alloptions', 'options' );
 
 	return true;
 }
@@ -190,7 +281,7 @@ function _set_upgrade_lock( $release_timeout ) {
 			$wpdb->prepare(
 				"INSERT IGNORE INTO `$wpdb->sitemeta` ( `meta_key`, `meta_value` ) VALUES (%s, %s) /* LOCK */",
 				UPGRADE_LOCK_OPTION_NAME,
-				time()
+				time(),
 			)
 		);
 	} else {
@@ -198,7 +289,7 @@ function _set_upgrade_lock( $release_timeout ) {
 			$wpdb->prepare(
 				"INSERT IGNORE INTO `$wpdb->options` ( `option_name`, `option_value`, `autoload` ) VALUES (%s, %s, 'no') /* LOCK */",
 				UPGRADE_LOCK_OPTION_NAME,
-				time()
+				time(),
 			)
 		);
 	}
@@ -232,9 +323,32 @@ function _set_upgrade_lock( $release_timeout ) {
  *
  * When the upgrader halts, timeouts, or crashes for any reason, this will run.
  *
- * @since 4.0.0
- * @since 4.1.0 Now uses a controllable option instead of a transient.
+ * @since 2.0.0
  */
 function _release_upgrade_lock() {
 	\delete_site_option( UPGRADE_LOCK_OPTION_NAME );
+}
+
+/**
+ * Updates file extension regexes to mime type option names
+ * (2.0 to 2.1 ALLOWED_MIME_TYPES_OPTIONS_NAME option value).
+ *
+ * @since 2.1.0
+ * @param string[] $extension_regexes File extension regexes.
+ * @return string[] Mime type option names.
+ */
+function _update_extension_regexes_to_mime_type_options( $extension_regexes ) {
+
+	$supported_types = [];
+
+	// This extracts SUPPORTED_MIME_TYPES to becomes [ 'avif' => 'avif|avifs', 'bpm' => 'bmp', ... ]
+	$options = array_combine(
+		array_keys( SUPPORTED_MIME_TYPES ),
+		array_column( SUPPORTED_MIME_TYPES, 0 ),
+	);
+
+	foreach ( $extension_regexes as $regex )
+		$supported_types[] = array_search( $regex, $options, true ) ?: '';
+
+	return implode( ',', array_filter( $supported_types, 'strlen' ) );
 }
