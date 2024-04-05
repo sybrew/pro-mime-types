@@ -257,11 +257,11 @@ function _register_or_migrate_settings() {
 	}
 
 	// This separate branch passes the bar for db version 2100.
-	$success = is_network_mode()
-		? \update_site_option( DB_VERSION_OPTION_NAME, 2100 )
-		: \update_option( DB_VERSION_OPTION_NAME, 2100 );
-
-	return true;
+	return (bool) (
+		is_network_mode()
+			? \update_site_option( DB_VERSION_OPTION_NAME, 2100 )
+			: \update_option( DB_VERSION_OPTION_NAME, 2100 )
+	);
 }
 
 /**
