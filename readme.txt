@@ -53,7 +53,7 @@ Alternatively, Pro Mime Types can run in single-site mode, where every subsite h
 
 == Frequently Asked Questions ==
 
-= I enabled a file type, but I still couldn't upload it =
+= I enabled a file type, but I still couldn't upload it! =
 
 Not all PHP installations recognize MIME types the same way, making it difficult for us to test every file type.
 
@@ -77,7 +77,7 @@ No. Direct PHP file uploads cannot be enabled via this plugin. You should use FT
 
 = 2.1.1 =
 
-* Fixed: Addressed an issue where the upgrader fired twice on new sites, causing the default settings not disable support for mime types with multiple file extensions.
+* Fixed: Addressed an issue where the upgrader fired twice on new sites, causing the default settings to disable support for MIME types with multiple file extensions.
 
 = 2.1.0 =
 
