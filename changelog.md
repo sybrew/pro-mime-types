@@ -1,3 +1,9 @@
+= 2.2.0 =
+
+* Added: Support for EPUB files (`application/epub+zip`, extension `epub`).
+* Added: Support for PCM audio files (`audio/x-wav`, extension `pcm`).
+* Fixed: WordPress 6.8 started showing deprecation notices about text domains being loaded too early. We resolved this by loading the plugin at `init`, instead of `plugins_loaded`.
+
 = 2.1.1 =
 
 * Fixed: Addressed an issue where the upgrader fired twice on new sites, causing the default settings not disable support for mime types with multiple file extensions.

@@ -9,7 +9,7 @@ namespace Pro_Mime_Types\Admin\Views;
 
 \defined( 'Pro_Mime_Types\PLUGIN_BASE_FILE' ) or die;
 
-use const \Pro_Mime_Types\{
+use const Pro_Mime_Types\{
 	Admin\SAVE_NONCE,
 	Admin\SAVE_ACTION,
 	MIME_DANGER_LEVEL,
@@ -17,14 +17,14 @@ use const \Pro_Mime_Types\{
 	ALLOWED_MIME_TYPES_OPTIONS_NAME,
 };
 
-use function \Pro_Mime_Types\{
+use function Pro_Mime_Types\{
 	is_network_mode,
 	get_allowed_mime_types_settings,
 };
 
 /**
  * Pro Mime Types plugin
- * Copyright (C) 2023 - 2024 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2023 - 2025 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -40,20 +40,21 @@ use function \Pro_Mime_Types\{
  */
 
 ?>
-<h2><?= \esc_html__( 'MIME Type Options', 'pro-mime-types' ); ?></h2>
-
-<p><?=
+<h2><?= \esc_html__( 'MIME Type Options', 'pro-mime-types' ) ?></h2>
+<?php
+\printf(
+	'<p>%s %s</p>',
 	\esc_html__( 'The options below will allow or block file types for upload within your WordPress installation.', 'pro-mime-types' ),
-	' ',
 	is_network_mode()
 		? \esc_html__( 'These options affect all users on all sites of this network.', 'pro-mime-types' )
-		: \esc_html__( 'These options affect all users of this site.', 'pro-mime-types' )
-?></p>
-<p><?=
+		: \esc_html__( 'These options affect all users of this site.', 'pro-mime-types' ),
+);
+\printf(
+	'<p>%s %s</p>',
 	\esc_html__( "These options won't affect user upload permissions, only the permitted file extensions and MIME types for those who may already upload.", 'pro-mime-types' ),
-	' ',
-	\esc_html__( 'Other plugins and themes may still override these options.', 'pro-mime-types' )
-?></p>
+	\esc_html__( 'Other plugins and themes may still override these options.', 'pro-mime-types' ),
+);
+?>
 
 <hr class=hr-separator>
 
@@ -183,4 +184,3 @@ use function \Pro_Mime_Types\{
 	<?php \submit_button(); ?>
 </form>
 <?php
-//* # Le Form end

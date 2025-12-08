@@ -7,7 +7,7 @@ namespace Pro_Mime_Types\Upgrade;
 
 \defined( 'Pro_Mime_Types\VERSION' ) or die;
 
-use const \Pro_Mime_Types\{
+use const Pro_Mime_Types\{
 	ALLOWED_MIME_TYPES_OPTIONS_NAME,
 	DB_VERSION,
 	DB_VERSION_OPTION_NAME,
@@ -15,7 +15,7 @@ use const \Pro_Mime_Types\{
 	SUPPORTED_MIME_TYPES,
 };
 
-use function \Pro_Mime_Types\{
+use function Pro_Mime_Types\{
 	get_allowed_mime_types_settings,
 	get_db_version,
 	is_network_mode,
@@ -23,7 +23,7 @@ use function \Pro_Mime_Types\{
 
 /**
  * Pro Mime Types plugin
- * Copyright (C) 2023 - 2024 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2023 - 2025 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published

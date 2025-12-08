@@ -7,16 +7,16 @@ namespace Pro_Mime_Types\Admin;
 
 \defined( 'Pro_Mime_Types\VERSION' ) or die;
 
-use const \Pro_Mime_Types\{
+use const Pro_Mime_Types\{
 	ALLOWED_MIME_TYPES_OPTIONS_NAME,
 	PLUGIN_DIR_PATH,
 };
 
-use function \Pro_Mime_Types\is_network_mode;
+use function Pro_Mime_Types\is_network_mode;
 
 /**
  * Pro Mime Types plugin
- * Copyright (C) 2023 - 2024 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2023 - 2025 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -247,7 +247,7 @@ function _process_settings_submission() {
 /**
  * Adds various links to the plugin row on the plugin's screen.
  *
- * @hook plugin_action_links_pro-mime-types/promimetypes.php
+ * @hook plugin_action_links_pro-mime-types/promimetypes.php 10
  * @since 2.1.0
  * @access private
  *
@@ -258,7 +258,7 @@ function _add_plugin_action_links( $links ) {
 	return _current_user_can_manage_settings()
 		? array_merge(
 			[
-				'settings' => sprintf(
+				'settings' => \sprintf(
 					'<a href="%s">%s</a>',
 					is_network_mode()
 						? \esc_url( \network_admin_url( 'settings.php?page=' . PAGE_HOOK ) )
@@ -274,7 +274,7 @@ function _add_plugin_action_links( $links ) {
 /**
  * Adds various links to the plugin row on the plugin's screen.
  *
- * @hook network_admin_plugin_action_links_pro-mime-types/promimetypes.php
+ * @hook network_admin_plugin_action_links_pro-mime-types/promimetypes.php 10
  * @since 2.1.0
  * @access private
  *
@@ -285,7 +285,7 @@ function _add_plugin_network_action_links( $links ) {
 	// No need to check for capabilities here. activate_plugins implies manage_options on single site. Technically, a bug.
 	return array_merge(
 		[
-			'settings' => sprintf(
+			'settings' => \sprintf(
 				'<a href="%s">%s</a>',
 				\esc_url( \network_admin_url( 'settings.php?page=' . PAGE_HOOK ) ),
 				\esc_html__( 'Settings', 'pro-mime-types' ),

@@ -9,16 +9,16 @@ namespace Pro_Mime_Types\Admin\Views;
 
 \defined( 'Pro_Mime_Types\PLUGIN_BASE_FILE' ) or die;
 
-use const \Pro_Mime_Types\{
+use const Pro_Mime_Types\{
 	MIME_DANGER_LEVEL,
 	SUPPORTED_MIME_TYPES,
 };
 
-use function \Pro_Mime_Types\Admin\_get_mime_type_section_titles;
+use function Pro_Mime_Types\Admin\_get_mime_type_section_titles;
 
 /**
  * Pro Mime Types plugin
- * Copyright (C) 2023 - 2024 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2023 - 2025 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -36,13 +36,9 @@ use function \Pro_Mime_Types\Admin\_get_mime_type_section_titles;
 ?>
 <h2><?= \esc_html__( 'Currently allowed MIME types', 'pro-mime-types' ) ?></h2>
 
-<p><?=
-	\esc_html__( 'Another plugin or theme may influence MIME type support. In the lists below you can inspect if this is happening.', 'pro-mime-types' )
-?></p>
+<p><?= \esc_html__( 'Another plugin or theme may influence MIME type support. In the lists below you can inspect if this is happening.', 'pro-mime-types' ) ?></p>
 
-<p><?=
-	\esc_html__( 'The assumed safety listed considers how likely a file can be used in nefarious ways.', 'pro-mime-types' )
-?></p>
+<p><?= \esc_html__( 'The assumed safety listed considers how likely a file can be used in nefarious ways.', 'pro-mime-types' ) ?></p>
 
 <hr class=hr-separator>
 
@@ -72,14 +68,14 @@ foreach ( SUPPORTED_MIME_TYPES as [ $extension_regex, $mime, $danger, $comment, 
 <div class=pmt-settings-accordion>
 	<h3 class=pmt-settings-accordion-heading>
 		<button aria-expanded=false class=pmt-settings-accordion-trigger aria-controls=pmt-settings-accordion-block-by-pro-mime-types type=button>
-			<span class=title><?=
-			\esc_html__( 'Allowed via Pro Mime Types', 'pro-mime-types' ),
-			' ',
-			\esc_html( sprintf(
-				'(%s)',
-				\number_format_i18n( \count( $intended_allowed_mime_types ) )
-			) )
-			?></span>
+			<?php
+			\printf(
+				'<span class=title>%s (%s)</span>',
+				\esc_html__( 'Allowed via Pro Mime Types', 'pro-mime-types' ),
+				\esc_html( \number_format_i18n( \count( $intended_allowed_mime_types ) ) ),
+			);
+			?>
+			</span>
 			<span class=icon></span>
 		</button>
 	</h3>
@@ -101,7 +97,7 @@ foreach ( SUPPORTED_MIME_TYPES as [ $extension_regex, $mime, $danger, $comment, 
 						   $supported_mime_types[ $extension_regex ]
 						?? [
 							// translators: %s = File extension
-							sprintf( \__( 'Removed support: %s', 'pro-mime-types' ), $extension_regex ),
+							\sprintf( \__( 'Removed support: %s', 'pro-mime-types' ), $extension_regex ),
 							'',
 							MIME_DANGER_LEVEL['dangerous'],
 							\__( 'Unregistered MIME type!', 'pro-mime-types' ),
@@ -146,14 +142,13 @@ foreach ( SUPPORTED_MIME_TYPES as [ $extension_regex, $mime, $danger, $comment, 
 <div class=pmt-settings-accordion>
 	<h3 class=pmt-settings-accordion-heading>
 		<button aria-expanded=false class=pmt-settings-accordion-trigger aria-controls=pmt-settings-accordion-block-elsewhere type=button>
-			<span class=title><?=
-			\esc_html__( 'Allowed via other software', 'pro-mime-types' ),
-			' ',
-			\esc_html( sprintf(
-				'(%s)',
-				\number_format_i18n( \count( $extraneous_allowed_mime_types ) )
-			) )
-			?></span>
+			<?php
+			\printf(
+				'<span class=title>%s (%s)</span>',
+				\esc_html__( 'Allowed via other software', 'pro-mime-types' ),
+				\esc_html( \number_format_i18n( \count( $extraneous_allowed_mime_types ) ) ),
+			);
+			?>
 			<span class=icon></span>
 		</button>
 	</h3>
@@ -175,7 +170,7 @@ foreach ( SUPPORTED_MIME_TYPES as [ $extension_regex, $mime, $danger, $comment, 
 						   $supported_mime_types[ $extension_regex ]
 						?? [
 							// translators: %s = File extension
-							sprintf( \__( 'Unregistered: %s', 'pro-mime-types' ), $extension_regex ),
+							\sprintf( \__( 'Unregistered: %s', 'pro-mime-types' ), $extension_regex ),
 							$mime,
 							MIME_DANGER_LEVEL['dangerous'],
 							\__( 'Unregistered MIME type.', 'pro-mime-types' ),

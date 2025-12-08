@@ -9,17 +9,17 @@ namespace Pro_Mime_Types\Admin\Views;
 
 \defined( 'Pro_Mime_Types\PLUGIN_BASE_FILE' ) or die;
 
-use const \Pro_Mime_Types\{
+use const Pro_Mime_Types\{
 	MIME_DANGER_LEVEL,
 	Admin\PAGE_HOOK,
 	Admin\SAVED_RESPONSE,
 };
 
-use function \Pro_Mime_Types\is_network_mode;
+use function Pro_Mime_Types\is_network_mode;
 
 /**
  * Pro Mime Types plugin
- * Copyright (C) 2023 - 2024 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2023 - 2025 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -81,7 +81,7 @@ $current_tab = isset( $_GET['tab'], $tabs[ $_GET['tab'] ] ) ? $_GET['tab'] : '';
 	<div class=pmt-settings-title-section>
 		<h1>Pro Mime Types</h1>
 	</div>
-	<nav class="pmt-settings-tabs-wrapper hide-if-no-js" aria-label="<?= \esc_attr__( 'Secondary menu', 'default' ); ?>">
+	<nav class="pmt-settings-tabs-wrapper hide-if-no-js" aria-label="<?= \esc_attr__( 'Secondary menu', 'default' ) ?>">
 		<?php
 		$tab_attributes = [
 			'active'   => 'class="pmt-settings-tab active" aria-current="true"',
@@ -93,7 +93,7 @@ $current_tab = isset( $_GET['tab'], $tabs[ $_GET['tab'] ] ) ? $_GET['tab'] : '';
 				\esc_url( $tab['link'] ),
 				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- String literals.
 				$tab_attributes[ $tab_key === $current_tab ? 'active' : 'inactive' ],
-				\esc_html( $tab['title'] )
+				\esc_html( $tab['title'] ),
 			);
 		}
 		?>
@@ -103,7 +103,7 @@ $current_tab = isset( $_GET['tab'], $tabs[ $_GET['tab'] ] ) ? $_GET['tab'] : '';
 <hr class=wp-header-end>
 
 <div class="notice notice-error hide-if-js inline">
-	<p><?= \esc_html__( 'Pro Mime Types settings require JavaScript.', 'pro-mime-types' ); ?></p>
+	<p><?= \esc_html__( 'Pro Mime Types settings require JavaScript.', 'pro-mime-types' ) ?></p>
 </div>
 
 <?php
@@ -129,7 +129,6 @@ switch ( (int) ( $_GET[ SAVED_RESPONSE ] ?? -1 ) ) {
 			<?= \esc_html__( 'No settings were changed.', 'pro-mime-types' ) ?>
 		</p></div>
 		<?php
-		break;
 }
 
 /**

@@ -4,15 +4,19 @@
  *
  * @package   Pro_Mime_Types
  * @author    Sybre Waaijer
- * @copyright 2024 CyberWire B.V. (https://cyberwire.nl/)
+ * @copyright 2025 CyberWire B.V. (https://cyberwire.nl/)
  * @license   GPL-3.0
  * @link      https://github.com/sybrew/pro-mime-types
+ * @access    public
+ *
+ * @troy-repo
+ * Troy: repo.cyberwire.nl
  *
  * @wordpress-plugin
  * Plugin Name: Pro Mime Types - Manage file media types
  * Plugin URI: https://wordpress.org/plugins/pro-mime-types/
  * Description: Enable or block MIME types and file extensions for media / file / attachment uploads through a nifty (network) admin menu.
- * Version: 2.1.1
+ * Version: 2.2.0
  * Author: Sybre Waaijer
  * Author URI: https://cyberwire.nl/
  * License: GPLv3
@@ -28,7 +32,7 @@ namespace Pro_Mime_Types;
 
 /**
  * Pro Mime Types plugin
- * Copyright (C) 2015 - 2024 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2015 - 2025 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -48,7 +52,7 @@ namespace Pro_Mime_Types;
  *
  * @since 2.0.0
  */
-const VERSION = '2.1.1';
+const VERSION = '2.2.0';
 
 /**
  * The plugin database version.
@@ -97,10 +101,11 @@ const ALLOWED_MIME_TYPES_OPTIONS_NAME = 'pro_mime_types_settings';
  */
 const DB_VERSION_OPTION_NAME = 'pro_mime_types_db_version';
 
-\add_action( 'plugins_loaded', __NAMESPACE__ . '\_plugin_init' );
+\add_action( 'init', __NAMESPACE__ . '\_plugin_init' );
 /**
  * Initializes the plugin.
  *
+ * @hook init 10
  * @since 2.0.0
  * @access private
  */
@@ -299,6 +304,7 @@ function _define_supported_mime_types() {
 				'wav'     => [ 'wav', 'audio/wav', $safe, '', 'audio' ],
 				'wax'     => [ 'wax', 'audio/x-ms-wax', $safe, '', 'audio' ],
 				'wma'     => [ 'wma', 'audio/x-ms-wma', $safe, '', 'audio' ],
+				'pcm'     => [ 'pcm', 'audio/x-wav', $safe, '', 'audio' ],
 
 				// Video formats.
 				'3g2'     => [ '3g2|3gp2', 'video/3gpp2', $safe, '', 'video' ], // Can also be audio
@@ -328,6 +334,7 @@ function _define_supported_mime_types() {
 				'oxps'    => [ 'oxps', 'application/oxps', $safe, '', 'document' ],
 				'pages'   => [ 'pages', 'application/vnd.apple.pages', $lowrisk, $is_macro_i18n, 'document' ],
 				'pdf'     => [ 'pdf', 'application/pdf', $lowrisk, \__( 'Can exploit vulnerabilities when opened in browsers.', 'pro-mime-types' ), 'document' ],
+				'epub'    => [ 'epub', 'application/epub+zip', $lowrisk, \__( 'EPUB files are ZIP archives containing XHTML and may include scripts.', 'pro-mime-types' ), 'document' ],
 				'psd'     => [ 'psd', 'image/vnd.adobe.photoshop', $safe, '', 'document' ],
 				'rtf'     => [ 'rtf', 'application/rtf', $safe, '', 'document' ],
 				'wpd'     => [ 'wp|wpd', 'application/wordperfect', $lowrisk, $is_macro_i18n, 'document' ],
