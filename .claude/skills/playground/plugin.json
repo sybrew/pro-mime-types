@@ -1,0 +1,32 @@
+{
+	"name": "Pro Mime Types",
+	"slug": "pro-mime-types",
+	"wporgSlug": "pro-mime-types",
+	"mainFile": "promimetypes.php",
+	"shims": [
+		".claude/skills/playground/mu-plugin/pmt-regression.php",
+		".claude/skills/playground/mu-plugin/pmt-playwright-admin.php"
+	],
+	"mounts": [
+		"promimetypes.php",
+		"inc",
+		"views",
+		"lib",
+		"language",
+		"readme.txt",
+		"license.txt"
+	],
+	"surfaceLines": {
+		"mimes": [ "settings:", "db:", "allowed:" ]
+	},
+	"surfaces": {
+		"mimes": [ "mimes" ]
+	},
+	"entries": [
+		{
+			"id": "mimes",
+			"type": "mimes",
+			"path": "/?pmt-regression=mimes"
+		}
+	]
+}

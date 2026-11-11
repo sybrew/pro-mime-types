@@ -15,3 +15,4 @@ paths:
 - Do not add parentheses to lone parameters in arrow functions.
 - Put each chained method call on a new line.
 - Add trailing commas to multiline parameter lists.
+- After editing unminified `lib` JavaScript, follow the [minify skill](../../.claude/skills/minify/SKILL.md) using the recorded JS permission.

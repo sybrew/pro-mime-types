@@ -9,3 +9,4 @@ applyTo: "**/*.css"
 - Use lowercase hex colors.
 - Remove the zero before decimal points.
 - Close the last property with a semicolon.
+- After editing unminified `lib` stylesheets, follow the [minify skill](../../.claude/skills/minify/SKILL.md) using the recorded CSS permission.

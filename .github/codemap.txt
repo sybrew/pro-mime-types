@@ -7,7 +7,7 @@ Text domain: pro-mime-types.
 
 Files named index.php are direct-access guards (no executable code).
 Files ending in .min.js or .min.css are minified mirrors of their source counterparts.
-This repository has no minify command. Do not edit the minified mirrors.
+Minified mirrors are produced by the minify skill. Do not edit them.
 .local/ is gitignored and intentionally absent from this map.
 
 
@@ -35,6 +35,17 @@ readme.txt                      WordPress.org plugin readme (description, FAQ, i
 		javascript.md               JavaScript conventions
 		local.md                    Workspace file guidance
 		php.md                      PHP, WordPress, SQL, templates, and PHPDoc
+	skills/                       Task workflows. Codex lists these from AGENTS.override.md
+		copyright/SKILL.md          Updates copyright years on files changed this year
+		makepot/SKILL.md            Regenerates language/pro-mime-types.pot
+		minify/SKILL.md             Minifies lib/admin.js and lib/admin.css
+		playground/SKILL.md         Playground regression for the MIME dump and settings screen
+		playground/plugin.json      Capture catalog, mounts, and mu-plugin shims
+		playground/mu-plugin/pmt-regression.php       Plain-text MIME dump for capture
+		playground/mu-plugin/pmt-playwright-admin.php Playwright admin login header
+		pre-release/SKILL.md        Release checklist for this plugin
+		trailing-comma/SKILL.md     Finds missing trailing commas in PHP
+		wrap/SKILL.md               Visual line width and wrap rules
 
 .cursor/
 	rules/                        Generated file rules and a Cursor-only workspace rule
@@ -45,6 +56,10 @@ readme.txt                      WordPress.org plugin readme (description, FAQ, i
 		local-files.mdc             Workspace file guidance
 		local.mdc                   Cursor search behavior for gitignored workspace files
 		php.mdc                     PHP, WordPress, SQL, templates, and PHPDoc
+	skills/                       Pointers at the Claude skills
+		makepot/README.md           Points at the makepot skill
+		playground/README.md        Points at the playground skill
+		playground/playwright.mcp.json  Sends the Playwright admin header
 
 .github/
 	codemap.txt                   This file

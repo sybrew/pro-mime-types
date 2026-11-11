@@ -1,0 +1,14 @@
+{
+	"browser": {
+		"launchOptions": {
+			"ignoreDefaultArgs": [
+				"--disable-blink-features=AutomationControlled"
+			]
+		},
+		"contextOptions": {
+			"extraHTTPHeaders": {
+				"X-PMT-Playground-Admin": "1"
+			}
+		}
+	}
+}

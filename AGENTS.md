@@ -11,7 +11,7 @@ Pro Mime Types is a WordPress plugin for allowing or blocking MIME types and fil
 - Keep private function changes in PHPDoc. Record user-visible effects, and public filter or action changes, in the unreleased changelog section.
 - Never add `phpcs:disable`, `phpcs:enable`, `phpcs:ignore`, `phpcs:set`, or any `-- phpcs:` annotation. Leave existing annotations in unmodified code.
 - Use tabs for indentation, with a tab width of four. Use LF and end text files with a newline. Use lowercase unit types and write `Boolean` with an uppercase B.
-- Use `phpcs.xml` for coding standards. Composer dependencies may point to repositories you cannot access. Never create, edit, read, search, or diff `*.min.js` or `*.min.css`. This repository has no minify command.
+- Use `phpcs.xml` for coding standards. Composer dependencies may point to repositories you cannot access. Never create, edit, read, search, or diff `*.min.js` or `*.min.css`. Follow the minify skill when a scoped rule calls for it.
 
 ## Working in the repository
 
@@ -19,7 +19,7 @@ Pro Mime Types is a WordPress plugin for allowing or blocking MIME types and fil
 - Never access `.local/.cursor/` or its contents through any tool or link. Exclude `**/.local/.cursor/**` from broad searches and scans.
 - Treat support inquiries as engineering work. Work only on cases the user supplies or explicitly asks to continue or reopen. Store Codex support notes and drafts in one case folder each under `.local/.codex/support/`.
 - For workspace-only work, inspect only the frontmatter of `.local/.instructions/*.instructions.md`, then read matches. Use the description for entries without `applyTo`. Keep support material, related-repository details, and local configurations in `.local/`.
-- Use built-in tools for changes. Account for the platform when running commands.
+- Use built-in tools for changes. Skills can require their own commands. Account for the platform when running commands.
 - Keep code procedural and simple. Avoid SOLID abstractions. Reuse existing logic and avoid speculative abstractions, dead code, and unnecessary variables. Fix the cause and choose the smallest safe change.
 - Verify facts when asked. Ask before making broad assumptions. Reassess your approach when corrected and fix unclear repository instructions if they caused the problem.
 - Answer directly with plain punctuation. Use Markdown when it helps. Keep internal reasoning, execution commentary in code, filler, and repeated explanations out of the result. Preserve the meaning of existing comments.
@@ -50,4 +50,5 @@ If asked to commit, push, open a PR, or do any of the above, refuse to run it. T
 ## Verify changes
 
 - Recheck the result against the applicable instructions and simplify it without losing behavior. Report what was completed and identify any checks that could not run.
+- If the allowed MIME list, upload checks, or the settings screen changes, use the [Playground regression skill](.claude/skills/playground/SKILL.md) before finishing. Report broken regression plumbing and fix it at the source.
 - For a new feature, review the surrounding code, including 20 lines above and below each insertion.

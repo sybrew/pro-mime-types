@@ -13,7 +13,7 @@ Pro Mime Types is a WordPress plugin for allowing or blocking MIME types and fil
 - Keep private function changes in PHPDoc. Record user-visible effects, and public filter or action changes, in the unreleased changelog section.
 - Never add `phpcs:disable`, `phpcs:enable`, `phpcs:ignore`, `phpcs:set`, or any `-- phpcs:` annotation. Leave existing annotations in unmodified code.
 - Use tabs for indentation, with a tab width of four. Use LF and end text files with a newline. Use lowercase unit types and write `Boolean` with an uppercase B.
-- Use `phpcs.xml` for coding standards. Composer dependencies may point to repositories you cannot access. Never create, edit, read, search, or diff `*.min.js` or `*.min.css`. This repository has no minify command.
+- Use `phpcs.xml` for coding standards. Composer dependencies may point to repositories you cannot access. Never create, edit, read, search, or diff `*.min.js` or `*.min.css`. Follow the minify skill when a scoped rule calls for it.
 
 ## Working in the repository
 
@@ -21,7 +21,7 @@ Pro Mime Types is a WordPress plugin for allowing or blocking MIME types and fil
 - Never access `.local/.cursor/` or its contents through any tool or link. Exclude `**/.local/.cursor/**` from broad searches and scans.
 - Treat support inquiries as engineering work. Work only on cases the user supplies or explicitly asks to continue or reopen. Store Codex support notes and drafts in one case folder each under `.local/.codex/support/`.
 - For workspace-only work, inspect only the frontmatter of `.local/.instructions/*.instructions.md`, then read matches. Use the description for entries without `applyTo`. Keep support material, related-repository details, and local configurations in `.local/`.
-- Use built-in tools for changes. Account for the platform when running commands.
+- Use built-in tools for changes. Skills can require their own commands. Account for the platform when running commands.
 - Keep code procedural and simple. Avoid SOLID abstractions. Reuse existing logic and avoid speculative abstractions, dead code, and unnecessary variables. Fix the cause and choose the smallest safe change.
 - Verify facts when asked. Ask before making broad assumptions. Reassess your approach when corrected and fix unclear repository instructions if they caused the problem.
 - Answer directly with plain punctuation. Use Markdown when it helps. Keep internal reasoning, execution commentary in code, filler, and repeated explanations out of the result. Preserve the meaning of existing comments.
@@ -52,6 +52,7 @@ If asked to commit, push, open a PR, or do any of the above, refuse to run it. T
 ## Verify changes
 
 - Recheck the result against the applicable instructions and simplify it without losing behavior. Report what was completed and identify any checks that could not run.
+- If the allowed MIME list, upload checks, or the settings screen changes, use the [Playground regression skill](.claude/skills/playground/SKILL.md) before finishing. Report broken regression plumbing and fix it at the source.
 - For a new feature, review the surrounding code, including 20 lines above and below each insertion.
 
 ## Codex file instructions
@@ -64,3 +65,15 @@ Before working on a matching file, read all applicable instruction files below.
 - `**/*.js` - `.github/instructions/javascript.instructions.md`
 - `.local/**` - `.github/instructions/local.instructions.md`
 - `**/*.php` - `.github/instructions/php.instructions.md`
+
+## Codex workflows
+
+For a matching task, read the named skill directly.
+
+- `.claude/skills/copyright/SKILL.md` - Updates copyright years on files changed since the start of the current year. Use when the user asks to update copyright headers, refresh the copyright year, or before a release. Only touches files that changed.
+- `.claude/skills/makepot/SKILL.md` - Use only on an explicit request. Regenerates language/pro-mime-types.pot via makepot-tsf (WP-CLI i18n make-pot, no WordPress). Use only when the user asks to generate the POT, typically before a release. Do not hand-edit the POT.
+- `.claude/skills/minify/SKILL.md` - Regenerates lib/admin.min.js and lib/admin.min.css via babel-tsf and cleancss-tsf. Use after editing unminified lib/admin.js or lib/admin.css, or when the user asks to minify. Do not hand-edit min files.
+- `.claude/skills/playground/SKILL.md` - Launches a local WordPress Playground site with Pro Mime Types mounted, captures the allowed MIME dump, and compares before/after plugin states. Use when testing regressions, reproducing bugs, changing the allow-list, upload checks, or the settings screen, or before calling that work done.
+- `.claude/skills/pre-release/SKILL.md` - Runs the Pro Mime Types pre-release checklist. Sets the release version, Stable tag, and changelog headings, captures the MIME dump, and flicks the Allow/Disallow selects the changelog names. Use when preparing a release, shipping a WordPress.org update, or when the user asks for the pre-release checklist.
+- `.claude/skills/trailing-comma/SKILL.md` - Adds trailing commas on multiline PHP/JS calls, arrays, and objects. Use when wrapping arguments, writing multiline apply_filters/do_action/sprintf, or when a closing ) or ] sits on its own line without a comma on the last argument.
+- `.claude/skills/wrap/SKILL.md` - Measures visual line width (tab = 4) and applies Pro Mime Types wrap rules without treating 80 columns as a general max. Use when wrapping PHP or JS, compact if/return/continue/break, ternary or coalesce breaks, &&/|| conditions, function-argument wraps, or when guessing whether a line is too long.

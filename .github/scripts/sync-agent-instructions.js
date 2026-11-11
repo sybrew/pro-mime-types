@@ -99,7 +99,7 @@ function outputs() {
 	}
 	const skillsDir = path.join( ROOT, SKILLS );
 
-	// This repository has no skills yet. Skip a missing directory instead of failing the check.
+	// Skip a missing skills directory so a checkout without skills still checks.
 	if ( fs.existsSync( skillsDir ) ) {
 		for ( const name of fs.readdirSync( skillsDir ).sort() ) {
 			const file = `${SKILLS}/${name}/SKILL.md`;
