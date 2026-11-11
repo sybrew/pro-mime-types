@@ -10,16 +10,19 @@ namespace Pro_Mime_Types\Admin\Views;
 \defined( 'Pro_Mime_Types\PLUGIN_BASE_FILE' ) or die;
 
 use const Pro_Mime_Types\{
-	Admin\SAVE_NONCE,
-	Admin\SAVE_ACTION,
+	ALLOWED_MIME_TYPES_OPTIONS_NAME,
 	MIME_DANGER_LEVEL,
 	SUPPORTED_MIME_TYPES,
-	ALLOWED_MIME_TYPES_OPTIONS_NAME,
+};
+
+use const Pro_Mime_Types\Admin\{
+	SAVE_ACTION,
+	SAVE_NONCE,
 };
 
 use function Pro_Mime_Types\{
-	is_network_mode,
 	get_allowed_mime_types_settings,
+	is_network_mode,
 };
 
 /**
@@ -51,7 +54,7 @@ use function Pro_Mime_Types\{
 );
 \printf(
 	'<p>%s %s</p>',
-	\esc_html__( "These options won't affect user upload permissions, only the permitted file extensions and MIME types for those who may already upload.", 'pro-mime-types' ),
+	\esc_html__( 'These options won\'t affect user upload permissions, only the permitted file extensions and MIME types for those who may already upload.', 'pro-mime-types' ),
 	\esc_html__( 'Other plugins and themes may still override these options.', 'pro-mime-types' ),
 );
 ?>
@@ -90,7 +93,7 @@ use function Pro_Mime_Types\{
 	$mime_type_titles_key_order = array_flip( array_keys( $mime_type_titles ) );
 	uasort(
 		$supported_mime_types,
-		fn( $a, $b ) => $mime_type_titles_key_order[ $a[4] ] <=> $mime_type_titles_key_order[ $b[4] ]
+		fn( $a, $b ) => $mime_type_titles_key_order[ $a[4] ] <=> $mime_type_titles_key_order[ $b[4] ],
 	);
 
 	// This creates [ 'option_key' => index ] for faster parsing.

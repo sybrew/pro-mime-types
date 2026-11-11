@@ -71,7 +71,9 @@ const SAVE_NONCE = [
  * @return bool
  */
 function _current_user_can_manage_settings() {
-	return \current_user_can( \is_multisite() ? 'manage_network' : 'manage_options' );
+	return \current_user_can(
+		\is_multisite() ? 'manage_network' : 'manage_options',
+	);
 }
 
 /**
@@ -102,7 +104,7 @@ function _register_network_admin_menu() {
 			'manage_network',
 			PAGE_HOOK,
 			__NAMESPACE__ . '\_display_admin_page',
-		)
+		),
 	);
 }
 
@@ -122,7 +124,7 @@ function _register_admin_menu() {
 			\is_multisite() ? 'manage_network' : 'manage_options',
 			PAGE_HOOK,
 			__NAMESPACE__ . '\_display_admin_page',
-		)
+		),
 	);
 }
 
@@ -134,6 +136,7 @@ function _register_admin_menu() {
  * @access private
  */
 function _init_admin_page() {
+
 	\add_filter(
 		'admin_body_class',
 		/**
@@ -152,6 +155,7 @@ function _init_admin_page() {
 	\add_action(
 		'admin_enqueue_scripts',
 		function () {
+
 			$dir_url = \plugin_dir_url( \Pro_Mime_Types\PLUGIN_BASE_FILE );
 			$min     = \defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
@@ -166,9 +170,9 @@ function _init_admin_page() {
 				"{$dir_url}lib/admin{$min}.js",
 				[],
 				\Pro_Mime_Types\VERSION,
-				true
+				true,
 			);
-		}
+		},
 	);
 }
 
@@ -217,7 +221,7 @@ function _process_settings_submission() {
 	if ( ! _current_user_can_manage_settings() )
 		\wp_die(
 			\esc_html__( 'Sorry, you are not allowed to update Pro Mime Types settings.', 'pro-mime-types' ),
-			403
+			403,
 		);
 
 	// Filter all non-true values in POST, get all keys, and then comma-separate them.
@@ -225,9 +229,9 @@ function _process_settings_submission() {
 		',',
 		array_keys(
 			array_filter(
-				(array) ( $_POST[ ALLOWED_MIME_TYPES_OPTIONS_NAME ] ?? [] )
-			)
-		)
+				(array) ( $_POST[ ALLOWED_MIME_TYPES_OPTIONS_NAME ] ?? [] ),
+			),
+		),
 	);
 
 	if ( is_network_mode() ) {

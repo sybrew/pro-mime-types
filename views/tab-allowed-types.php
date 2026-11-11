@@ -14,7 +14,7 @@ use const Pro_Mime_Types\{
 	SUPPORTED_MIME_TYPES,
 };
 
-use function Pro_Mime_Types\Admin\_get_mime_type_section_titles;
+use function Pro_Mime_Types\get_allowed_mime_types;
 
 /**
  * Pro Mime Types plugin
@@ -46,7 +46,7 @@ use function Pro_Mime_Types\Admin\_get_mime_type_section_titles;
 
 // This is [ $extension_regex => $mime ]
 $mime_type_allowed          = \get_allowed_mime_types();
-$mime_type_settings_regexes = \Pro_Mime_Types\get_allowed_mime_types();
+$mime_type_settings_regexes = get_allowed_mime_types();
 
 $intended_allowed_mime_types   = array_intersect_key( $mime_type_settings_regexes, $mime_type_allowed );
 $extraneous_allowed_mime_types = array_diff_key( $mime_type_allowed, $intended_allowed_mime_types );
@@ -94,10 +94,13 @@ foreach ( SUPPORTED_MIME_TYPES as [ $extension_regex, $mime, $danger, $comment, 
 				<?php
 				foreach ( $intended_allowed_mime_types as $extension_regex => $int ) {
 					[ $extension_regex, $mime, $danger, $comment, $type ] =
-						   $supported_mime_types[ $extension_regex ]
+						$supported_mime_types[ $extension_regex ]
 						?? [
-							// translators: %s = File extension
-							\sprintf( \__( 'Removed support: %s', 'pro-mime-types' ), $extension_regex ),
+							\sprintf(
+								/* translators: %s = File extension */
+								\__( 'Removed support: %s', 'pro-mime-types' ),
+								$extension_regex,
+							),
 							'',
 							MIME_DANGER_LEVEL['dangerous'],
 							\__( 'Unregistered MIME type!', 'pro-mime-types' ),
@@ -167,10 +170,13 @@ foreach ( SUPPORTED_MIME_TYPES as [ $extension_regex, $mime, $danger, $comment, 
 				<?php
 				foreach ( $extraneous_allowed_mime_types as $extension_regex => $mime ) {
 					[ $extension_regex, $mime, $danger, $comment, $type ] =
-						   $supported_mime_types[ $extension_regex ]
+						$supported_mime_types[ $extension_regex ]
 						?? [
-							// translators: %s = File extension
-							\sprintf( \__( 'Unregistered: %s', 'pro-mime-types' ), $extension_regex ),
+							\sprintf(
+								/* translators: %s = File extension */
+								\__( 'Unregistered: %s', 'pro-mime-types' ),
+								$extension_regex,
+							),
 							$mime,
 							MIME_DANGER_LEVEL['dangerous'],
 							\__( 'Unregistered MIME type.', 'pro-mime-types' ),

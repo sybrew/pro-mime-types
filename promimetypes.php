@@ -16,13 +16,14 @@
  * Plugin Name: Pro Mime Types - Manage file media types
  * Plugin URI: https://wordpress.org/plugins/pro-mime-types/
  * Description: Enable or block MIME types and file extensions for media / file / attachment uploads through a nifty (network) admin menu.
- * Version: 2.2.0
+ * Version: 2.2.1-dev-1
  * Author: Sybre Waaijer
  * Author URI: https://cyberwire.nl/
  * License: GPLv3
  * Text Domain: pro-mime-types
  * Domain Path: /language
  * Requires at least: 5.3
+ * Tested up to: 6.9
  * Requires PHP: 7.4.0
  */
 
@@ -52,7 +53,7 @@ namespace Pro_Mime_Types;
  *
  * @since 2.0.0
  */
-const VERSION = '2.2.0';
+const VERSION = '2.2.0-dev-1';
 
 /**
  * The plugin database version.
@@ -151,7 +152,7 @@ function _plugin_init() {
 		\add_action( 'admin_menu', 'Pro_Mime_Types\Admin\_register_admin_menu' );
 	}
 
-	// Also add link when in network mode. This will then go the network settings page.
+	// Also add link when in network mode. This will then go to the network settings page.
 	\add_filter( "plugin_action_links_$basename", 'Pro_Mime_Types\Admin\_add_plugin_action_links' );
 
 	\add_action( 'admin_post_' . Admin\SAVE_ACTION, 'Pro_Mime_Types\Admin\_process_settings_submission' );
@@ -167,7 +168,9 @@ function _plugin_init() {
  * @return bool
  */
 function is_network_mode() {
+
 	static $memo;
+
 	return $memo
 		??= \is_multisite() && isset(
 			\get_site_option( 'active_sitewide_plugins' )[ \plugin_basename( PLUGIN_BASE_FILE ) ]
@@ -175,12 +178,13 @@ function is_network_mode() {
 }
 
 /**
- * Returns an arrow of allowed MIME types from the settings.
+ * Returns the database version of Pro Mime Types.
  *
  * @since 2.1.0
+ * @since 2.2.0 Now describes the database version.
  * @access public
  *
- * @return int The current database version of Pro Mime Types.
+ * @return int The database version. 0 if the option is unset.
  */
 function get_db_version() {
 	return is_network_mode()
@@ -215,7 +219,7 @@ function get_allowed_mime_types() {
  * Returns allowed MIME type settings, comma separated.
  *
  * @since 2.0.0
- * @since 2.1.0 1: Added a first paramter ($as_array).
+ * @since 2.1.0 1: Added a first parameter ($as_array).
  *              2: Can no longer return false.
  * @access public
  *
@@ -229,7 +233,8 @@ function get_allowed_mime_types_settings( $as_array = false ) {
 		is_network_mode()
 			? \get_site_option( ALLOWED_MIME_TYPES_OPTIONS_NAME )
 			: \get_option( ALLOWED_MIME_TYPES_OPTIONS_NAME )
-		) ?: '';
+	)
+		?: '';
 
 	return $as_array
 		? explode( ',', $settings )
@@ -405,6 +410,6 @@ function _define_supported_mime_types() {
 				'odg'     => [ 'odg', 'application/vnd.oasis.opendocument.graphics', $safe, '', 'misc' ],
 				'onetoc'  => [ 'onetoc|onetoc2|onetmp|onepkg', 'application/onenote', $safe, '', 'misc' ],
 			],
-		)
+		),
 	);
 }

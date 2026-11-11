@@ -9,10 +9,9 @@ namespace Pro_Mime_Types\Admin\Views;
 
 \defined( 'Pro_Mime_Types\PLUGIN_BASE_FILE' ) or die;
 
-use const Pro_Mime_Types\{
-	MIME_DANGER_LEVEL,
-	Admin\PAGE_HOOK,
-	Admin\SAVED_RESPONSE,
+use const Pro_Mime_Types\Admin\{
+	PAGE_HOOK,
+	SAVED_RESPONSE,
 };
 
 use function Pro_Mime_Types\is_network_mode;
@@ -37,7 +36,7 @@ use function Pro_Mime_Types\is_network_mode;
 if ( is_network_mode() ) {
 	/**
 	 * @since 2.0.0
-	 * @param array The naviational tabs for network mode.
+	 * @param array The navigational tabs for network mode.
 	 */
 	$tabs = \apply_filters(
 		'pmt_navigation_tabs_network',
@@ -55,7 +54,7 @@ if ( is_network_mode() ) {
 } else {
 	/**
 	 * @since 2.0.0
-	 * @param array The naviational tabs.
+	 * @param array The navigational tabs.
 	 */
 	$tabs = \apply_filters(
 		'pmt_navigation_tabs',

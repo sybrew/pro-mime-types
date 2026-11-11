@@ -3,9 +3,9 @@ Contributors: Cybr
 Donate link: https://github.com/sponsors/sybrew
 Tags: attachment, image, mime types, upload, multisite
 Requires at least: 5.3
-Tested up to: 6.5
+Tested up to: 6.9
 Requires PHP: 7.4.0
-Stable tag: 2.1.1
+Stable tag: 2.2.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -61,7 +61,7 @@ Some file types are blocked by WordPress itself when the server lacks support fo
 
 If you find an issue, please open a [support topic](https://wordpress.org/support/plugin/pro-mime-types/#new-topic-0) or [GitHub issue](https://github.com/sybrew/pro-mime-types/issues/new) and detail your website's [PHP version](https://wordpress.org/documentation/article/site-health-screen/#server) and image extension so we can start investigating the MIME type.
 
-= Which file extensions are supported? ==
+= Which file extensions are supported? =
 
 `avif`, `avifs`, `bmp`, `gif`, `heic`, `heif`, `ico`, `jpg`, `jpeg`, `jpe`, `jif`, `jfif`, `png`, `svg`, `tif`, `tiff`, `webp`,  `aac`, `ac3`, `aff`, `aif`, `aiff`, `flac`, `mid`, `midi`, `mka`, `mp1`, `mp2`, `mp3`, `m3a`, `m4a`, `m4b`, `ogg`, `oga`, `pcm`, `ra`, `ram`, `wav`, `wax`, `wma`,  `3g2`, `3gp2`, `3gp`, `3gpp`, `asf`, `asx`, `avi`, `divx`, `mkv`, `mov`, `qt`, `mp4`, `m4v`, `mpeg`, `mpg`, `mpe`, `mpv`, `vob`, `ogv`, `ogm`, `rm`, `webm`, `wm`, `wmv`, `wmx`,  `doc`, `docm`, `docx`, `dotm`, `dotx`, `epub`, `odt`, `oxps`, `pages`, `pdf`, `psd`, `ai`, `rtf`, `wri`, `wp`, `wpd`, `xcf`, `xps`,  `numbers`, `ods`, `xla`, `xls`, `xlt`, `xlw`, `xlam`, `xlsb`, `xlsm`, `xlsx`, `xltm`, `xltx`,  `key`, `odp`, `pot`, `pps`, `ppt`, `potm`, `potx`, `ppam`, `ppsm`, `ppsx`, `pptm`, `pptx`, `sldm`, `sldx`,  `csv`, `ics`, `md`, `rtx`, `tsv`, `txt`, `asc`, `c`, `cc`, `h`, `srt`, `vtt`,  `7z`, `cab`, `gz`, `gzip`, `img`, `2mg`, `smi`, `dmg`, `rar`, `tar`, `zip`,  `css`, `dfxp`, `htm`, `html`, `js`, `xml`, `php`,  `class`, `exe`, `mdb`, `mpp`, `odb`, `odc`, `odf`, `odg`, `onetoc`, `onetoc2`, `onetmp`, and `onepkg`.
 

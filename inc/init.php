@@ -9,7 +9,7 @@ namespace Pro_Mime_Types\Main;
 
 use const Pro_Mime_Types\SUPPORTED_MIME_TYPES;
 
-use function Pro_Mime_Types\get_allowed_mime_types_settings;
+use function Pro_Mime_Types\get_allowed_mime_types;
 
 /**
  * Pro Mime Types plugin
@@ -65,7 +65,7 @@ function _register_mime_types( $mime_types ) {
  * @return array MIME types keyed by the file extension regex corresponding to those types.
  */
 function _register_allowed_upload_mimes() {
-	return \Pro_Mime_Types\get_allowed_mime_types();
+	return get_allowed_mime_types();
 }
 
 /**
@@ -90,8 +90,8 @@ function _register_all_imagesize_extensions( $mime_to_ext ) {
 		array_intersect(
 			// This creates [ 'jpg|jpeg|jpe' => 'image' ], aka [ extension_regex => type ];
 			array_column( SUPPORTED_MIME_TYPES, 4, 0 ),
-			[ 'image' ]
-		)
+			[ 'image' ],
+		),
 	);
 
 	foreach ( $image_mimes as $extension_regex => $mime )
@@ -120,7 +120,7 @@ function _register_all_video_extensions( $extensions ) {
 	$video_mimes = array_intersect(
 		// This creates [ 'jpg|jpeg|jpe' => 'image' ], aka [ extension_regex => type ];
 		array_column( SUPPORTED_MIME_TYPES, 4, 0 ),
-		[ 'video' ]
+		[ 'video' ],
 	);
 
 	foreach ( $video_mimes as $extension_regex => $type )
@@ -146,11 +146,11 @@ function _register_all_audio_extensions( $extensions ) {
 	// Reset.
 	$extensions = [];
 
-	// Gets all types of 'video':
+	// Gets all types of 'audio':
 	$audio_mimes = array_intersect(
 		// This creates [ 'jpg|jpeg|jpe' => 'image' ], aka [ extension_regex => type ];
 		array_column( SUPPORTED_MIME_TYPES, 4, 0 ),
-		[ 'audio' ]
+		[ 'audio' ],
 	);
 
 	foreach ( $audio_mimes as $extension_regex => $type )
@@ -207,7 +207,7 @@ function _register_post_mime_types( $post_mime_types ) {
 			\_n_noop(
 				'Image <span class="count">(%s)</span>',
 				'Images <span class="count">(%s)</span>',
-				'default'
+				'default',
 			),
 		],
 		'audio'       => [
@@ -217,7 +217,7 @@ function _register_post_mime_types( $post_mime_types ) {
 			\_n_noop(
 				'Audio <span class="count">(%s)</span>',
 				'Audio <span class="count">(%s)</span>',
-				'default'
+				'default',
 			),
 		],
 		'video'       => [
@@ -227,7 +227,7 @@ function _register_post_mime_types( $post_mime_types ) {
 			\_n_noop(
 				'Video <span class="count">(%s)</span>',
 				'Video <span class="count">(%s)</span>',
-				'default'
+				'default',
 			),
 		],
 		'document'    => [
@@ -237,7 +237,7 @@ function _register_post_mime_types( $post_mime_types ) {
 			\_n_noop(
 				'Document <span class="count">(%s)</span>',
 				'Documents <span class="count">(%s)</span>',
-				'default'
+				'default',
 			),
 		],
 		'spreadsheet' => [
@@ -247,7 +247,7 @@ function _register_post_mime_types( $post_mime_types ) {
 			\_n_noop(
 				'Spreadsheet <span class="count">(%s)</span>',
 				'Spreadsheets <span class="count">(%s)</span>',
-				'default'
+				'default',
 			),
 		],
 		'text'        => [
@@ -257,7 +257,7 @@ function _register_post_mime_types( $post_mime_types ) {
 			\_n_noop(
 				'Text <span class="count">(%s)</span>',
 				'Text <span class="count">(%s)</span>',
-				'pro-mime-types'
+				'pro-mime-types',
 			),
 		],
 		'archive'     => [
@@ -267,7 +267,7 @@ function _register_post_mime_types( $post_mime_types ) {
 			\_n_noop(
 				'Archive <span class="count">(%s)</span>',
 				'Archives <span class="count">(%s)</span>',
-				'default'
+				'default',
 			),
 		],
 		'code'        => [
@@ -277,7 +277,7 @@ function _register_post_mime_types( $post_mime_types ) {
 			\_n_noop(
 				'Code <span class="count">(%s)</span>',
 				'Code <span class="count">(%s)</span>',
-				'pro-mime-types'
+				'pro-mime-types',
 			),
 		],
 		'misc'        => [
@@ -287,7 +287,7 @@ function _register_post_mime_types( $post_mime_types ) {
 			\_n_noop(
 				'Miscellaneous <span class="count">(%s)</span>',
 				'Miscellaneous <span class="count">(%s)</span>',
-				'pro-mime-types'
+				'pro-mime-types',
 			),
 		],
 	];
@@ -353,15 +353,17 @@ function _allow_real_filetype_and_ext( $wp_check_filetype_and_ext, $file, $filen
 	if (
 		   ( $ext && $type ) // Already passed.
 		|| ( ! $real_mime || ! \is_string( $real_mime ) ) // Unsupported mime check.
-	) return compact( 'ext', 'type', 'proper_filename' );
+	) {
+		return compact( 'ext', 'type', 'proper_filename' );
+	}
 
 	// Let's not leak through.
 	$ext  = false;
 	$type = false;
 
-	$allowed = \Pro_Mime_Types\get_allowed_mime_types();
+	$allowed = get_allowed_mime_types();
 
-	if ( \str_starts_with( $real_mime, 'text/' ) ) {
+	if ( str_starts_with( $real_mime, 'text/' ) ) {
 		// Get all mime types of type text and code; these are assumed plaintext by PHP ($real_mime).
 		// Then, test whether BOTH the MIME type AND extension are allowed. Because some
 		// servers interpret plaintext files with certain extensions as-is, which is dangerous.

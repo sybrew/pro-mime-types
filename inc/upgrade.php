@@ -53,14 +53,17 @@ function _register_or_upgrade_settings() {
 	$timeout = 5 * \MINUTE_IN_SECONDS; // Same as WP Core, function update_core().
 
 	$lock = _set_upgrade_lock( $timeout );
+
 	// Lock failed to create--probably because it was already locked (or the database failed us).
-	if ( ! $lock ) return false;
+	if ( ! $lock )
+		return false;
 
 	register_shutdown_function( __NAMESPACE__ . '\\_release_upgrade_lock' );
 
 	\wp_raise_memory_limit( 'pmt_upgrade' );
 
 	$ini_max_execution_time = (int) ini_get( 'max_execution_time' );
+
 	if ( 0 !== $ini_max_execution_time )
 		set_time_limit( max( $ini_max_execution_time, $timeout ) );
 
@@ -110,7 +113,7 @@ function _upgrade_settings() {
 
 	switch ( true ) {
 		case $current_version < 2100:
-			// Convert from 2.0 to 2.1+; gets automaticlly from either network mode or single site.
+			// Convert from 2.0 to 2.1+; gets automatically from either network mode or single site.
 			$supported_types = _update_extension_regexes_to_mime_type_options( get_allowed_mime_types_settings( true ) );
 
 			// Migrate
@@ -119,6 +122,7 @@ function _upgrade_settings() {
 				: \update_option( ALLOWED_MIME_TYPES_OPTIONS_NAME, $supported_types );
 
 			if ( ! $success ) break;
+
 			// Pass through
 
 		case true:
@@ -140,6 +144,7 @@ function _upgrade_settings() {
  * @return bool True when done, false on failure.
  */
 function _register_or_migrate_settings() {
+
 	global $wpdb;
 
 	// Delete options; $success may, in an unpredicted event, return false otherwise.
@@ -164,7 +169,7 @@ function _register_or_migrate_settings() {
 			$wpdb->prepare(
 				"SELECT * FROM {$wpdb->sitemeta} WHERE meta_key LIKE %s",
 				$wpdb->esc_like( 'pmt_mime_type_' ) . '%',
-			)
+			),
 		);
 
 		if ( $old_results ) {
@@ -181,7 +186,7 @@ function _register_or_migrate_settings() {
 			$wpdb->prepare(
 				"SELECT * FROM {$wpdb->options} WHERE option_name LIKE %s",
 				$wpdb->esc_like( 'pmt_mime_type_' ) . '%',
-			)
+			),
 		);
 
 		if ( $old_results ) {
@@ -246,13 +251,13 @@ function _register_or_migrate_settings() {
 			$wpdb->prepare(
 				"DELETE FROM {$wpdb->sitemeta} WHERE meta_key LIKE %s",
 				$wpdb->esc_like( 'pmt_mime_type_' ) . '%',
-			)
+			),
 		);
 		$wpdb->query(
 			$wpdb->prepare(
 				"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s",
 				$wpdb->esc_like( 'pmt_mime_type_' ) . '%',
-			)
+			),
 		);
 	}
 
@@ -278,23 +283,26 @@ function _register_or_migrate_settings() {
  * @return bool False if a lock couldn't be created or if the lock is still valid. True otherwise.
  */
 function _set_upgrade_lock( $release_timeout ) {
+
 	global $wpdb;
 
 	if ( \is_multisite() ) {
 		$lock_result = $wpdb->query(
 			$wpdb->prepare(
-				"INSERT IGNORE INTO `$wpdb->sitemeta` ( `meta_key`, `meta_value` ) VALUES (%s, %s) /* LOCK */",
+				"INSERT IGNORE INTO `$wpdb->sitemeta` ( `meta_key`, `meta_value` )
+					VALUES (%s, %s) /* LOCK */",
 				UPGRADE_LOCK_OPTION_NAME,
 				time(),
-			)
+			),
 		);
 	} else {
 		$lock_result = $wpdb->query(
 			$wpdb->prepare(
-				"INSERT IGNORE INTO `$wpdb->options` ( `option_name`, `option_value`, `autoload` ) VALUES (%s, %s, 'no') /* LOCK */",
+				"INSERT IGNORE INTO `$wpdb->options` ( `option_name`, `option_value`, `autoload` )
+					VALUES (%s, %s, 'no') /* LOCK */",
 				UPGRADE_LOCK_OPTION_NAME,
 				time(),
-			)
+			),
 		);
 	}
 
