@@ -73,6 +73,7 @@ function _register_allowed_upload_mimes() {
  *
  * @hook getimagesize_mimes_to_exts 10
  * @since 2.0.0
+ * @since 2.2.1 Now maps image/heif and the HEIC and HEIF sequence types to the HEIC extension.
  * @access private
  *
  * @param array $mime_to_ext Array of image mime types and their matching extensions.
@@ -96,6 +97,13 @@ function _register_all_imagesize_extensions( $mime_to_ext ) {
 
 	foreach ( $image_mimes as $extension_regex => $mime )
 		$mime_to_ext[ $mime ] = strtok( $extension_regex, '|' );
+
+	if ( isset( $mime_to_ext['image/heic'] ) ) {
+		// WordPress reports these separately. They are still HEIC files.
+		$mime_to_ext['image/heic-sequence'] = $mime_to_ext['image/heic'];
+		$mime_to_ext['image/heif']          = $mime_to_ext['image/heic'];
+		$mime_to_ext['image/heif-sequence'] = $mime_to_ext['image/heic'];
+	}
 
 	return $mime_to_ext;
 }
@@ -308,7 +316,7 @@ function _register_post_mime_types( $post_mime_types ) {
 		$group_mime_types = [];
 		foreach ( $ext_types[ $group ] as $extension ) {
 			foreach ( $mime_types as $exts => $mime ) {
-				if ( preg_match( '!^(' . $exts . ')$!i', $extension ) ) {
+				if ( preg_match( '/^(' . str_replace( '/', '\/', $exts ) . ')$/i', $extension ) ) {
 					$group_mime_types[] = $mime;
 					break;
 				}
@@ -328,6 +336,9 @@ function _register_post_mime_types( $post_mime_types ) {
  *
  * @hook wp_check_filetype_and_ext 10
  * @since 2.0.0
+ * @since 2.2.1 Now allows MPEG audio that fileinfo reports as video/mp4 or video/3gpp.
+ * @since 2.2.1 Now allows ICO files reported as image/vnd.microsoft.icon, and SRT files reported as application/x-subrip.
+ * @since 2.2.1 Now allows Gzip files reported as application/gzip.
  * @access private
  * @see wp_check_filetype_and_ext(), this function replicates its behavior.
  *
@@ -389,6 +400,46 @@ function _allow_real_filetype_and_ext( $wp_check_filetype_and_ext, $file, $filen
 		// No "lookalike" text/plain match found.
 		if ( ! $ext || ! $type )
 			return compact( 'ext', 'type', 'proper_filename' );
+	} elseif ( \in_array(
+		$real_mime,
+		[ 'video/mp4', 'video/3gpp' ],
+		true,
+	) ) {
+		// fileinfo reports some MPEG audio, including .m4a phone recordings, as
+		// video/mp4 or video/3gpp. WordPress 7.1 rejects that major-type mismatch.
+		$wp_filetype = \wp_check_filetype( $filename, $allowed );
+
+		if ( 'audio/mpeg' === $wp_filetype['type'] ) {
+			$ext  = $wp_filetype['ext'];
+			$type = $wp_filetype['type'];
+		}
+	} elseif ( 'image/vnd.microsoft.icon' === $real_mime ) {
+		// fileinfo uses the registered icon type. WordPress stores image/x-icon.
+		$wp_filetype = \wp_check_filetype( $filename, $allowed );
+
+		if ( 'image/x-icon' === $wp_filetype['type'] ) {
+			$ext  = $wp_filetype['ext'];
+			$type = $wp_filetype['type'];
+		}
+	} elseif ( 'application/x-subrip' === $real_mime ) {
+		// SubRip files are plain text. fileinfo reports application/x-subrip.
+		$wp_filetype = \wp_check_filetype( $filename, $allowed );
+
+		if (
+			   'srt' === strtolower( (string) $wp_filetype['ext'] )
+			&& 'text/plain' === $wp_filetype['type']
+		) {
+			$ext  = $wp_filetype['ext'];
+			$type = $wp_filetype['type'];
+		}
+	} elseif ( 'application/gzip' === $real_mime ) {
+		// fileinfo uses the registered gzip type. WordPress stores application/x-gzip.
+		$wp_filetype = \wp_check_filetype( $filename, $allowed );
+
+		if ( 'application/x-gzip' === $wp_filetype['type'] ) {
+			$ext  = $wp_filetype['ext'];
+			$type = $wp_filetype['type'];
+		}
 	} else {
 		if ( 'image/heif' === $real_mime ) {
 			// PHP switches around image/heic and image/heif for heif and heic respectively...

@@ -75,6 +75,14 @@ No. Direct PHP file uploads cannot be enabled via this plugin. You should use SF
 
 == Changelog ==
 
+= 2.2.1 =
+
+* Fixed: MPEG audio (`.mp1`, `.mp2`, `.mp3`, `.m3a`, `.m4a`, and `.m4b`) can be uploaded when the server identifies the file as `video/mp4` or `video/3gpp`. WordPress 7.1 rejects that mismatch, which is how many phone recordings are stored.
+* Fixed: `.ico` files can be uploaded when the server identifies them as `image/vnd.microsoft.icon`.
+* Fixed: `.srt` subtitle files can be uploaded when the server identifies them as `application/x-subrip`.
+* Fixed: `.heic` and `.heif` files can be uploaded when the server identifies them as `image/heif`, `image/heic-sequence`, or `image/heif-sequence`.
+* Fixed: `.gz` and `.gzip` files can be uploaded when the server identifies them as `application/gzip`.
+
 = 2.2.0 =
 
 * Added: Support for EPUB files (`application/epub+zip`, extension `epub`).
