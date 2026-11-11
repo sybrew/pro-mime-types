@@ -1,0 +1,6 @@
+---
+description: Cursor search behavior for gitignored workspace files
+alwaysApply: true
+---
+
+Cursor's Grep and Glob can miss gitignored `.local/` files even with `!.local/**` in `.cursorignore`. Use Read or Write with an explicit path, or Shell (`Get-ChildItem`, `Select-String`, `rg --no-ignore-vcs`). Empty search results do not establish that a directory is empty.

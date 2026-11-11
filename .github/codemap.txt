@@ -1,0 +1,107 @@
+Pro Mime Types Codebase Map
+=============================
+
+WordPress plugin for allowing or blocking MIME types and file extensions.
+Supports single-site and Multisite network mode. Requires PHP 7.4+, WordPress 5.3+.
+Text domain: pro-mime-types.
+
+Files named index.php are direct-access guards (no executable code).
+Files ending in .min.js or .min.css are minified mirrors of their source counterparts.
+This repository has no minify command. Do not edit the minified mirrors.
+.local/ is gitignored and intentionally absent from this map.
+
+
+Root
+----
+.editorconfig                   Editor config: tabs (4-wide), LF endings, final newline
+.gitattributes                  Line-ending normalization, binary markers, export-ignore rules for dev files
+.gitignore                      Ignores archives, logs, OS artifacts, and .local/ contents
+.cursorignore                   Re-includes gitignored .local/ for Cursor indexing
+AGENTS.md                       Shared repository and Git/GitHub rules loaded by agent harnesses
+AGENTS.override.md              Generated Codex startup rules with exact scoped rule paths
+changelog.md                    Full release changelog
+license.txt                     GNU General Public License v3
+phpcs.xml                       PHP_CodeSniffer ruleset configuring the TSF coding standard
+promimetypes.php                Main plugin file: header metadata, version and MIME constants, bootstraps the plugin
+README.md                       Short GitHub pointer to the WordPress.org plugin page
+readme.txt                      WordPress.org plugin readme (description, FAQ, installation, current changelog)
+
+.claude/
+	CLAUDE.md                     Native import of the shared startup rules
+	rules/                        Generated Claude rules with native path selectors
+		code-style.md               PHP and JavaScript formatting
+		css.md                      CSS conventions and layout debugging
+		docs.md                     Readme and changelog wording
+		javascript.md               JavaScript conventions
+		local.md                    Workspace file guidance
+		php.md                      PHP, WordPress, SQL, templates, and PHPDoc
+
+.cursor/
+	rules/                        Generated file rules and a Cursor-only workspace rule
+		code-style.mdc              PHP and JavaScript formatting
+		css.mdc                     CSS conventions and layout debugging
+		docs.mdc                    Readme and changelog wording
+		javascript.mdc              JavaScript conventions
+		local-files.mdc             Workspace file guidance
+		local.mdc                   Cursor search behavior for gitignored workspace files
+		php.mdc                     PHP, WordPress, SQL, templates, and PHPDoc
+
+.github/
+	codemap.txt                   This file
+	instructions/                 Canonical scoped rule bodies and native Copilot selectors
+		code-style.instructions.md  PHP and JavaScript formatting
+		css.instructions.md         CSS conventions and layout debugging
+		docs.instructions.md        Readme and changelog wording
+		javascript.instructions.md  JavaScript conventions
+		local.instructions.md       Workspace file guidance and instruction selection
+		php.instructions.md         PHP, WordPress, SQL, templates, and PHPDoc
+	scripts/
+		sync-agent-instructions.js  Generates and checks Codex, Claude, and Cursor rules
+
+.vscode/
+	settings.json                 Stops VS Code from loading Claude copies beside the shared rules
+
+
+Bootstrap (promimetypes.php)
+----------------------------
+Namespace Pro_Mime_Types. Hooks _plugin_init on init.
+
+Defines VERSION, DB_VERSION, PLUGIN_BASE_FILE, PLUGIN_DIR_PATH, MIME_DANGER_LEVEL,
+ALLOWED_MIME_TYPES_OPTIONS_NAME, and DB_VERSION_OPTION_NAME.
+_define_supported_mime_types() defines SUPPORTED_MIME_TYPES and applies pmt_supported_mime_types.
+is_network_mode() is true when the plugin is network-activated.
+get_db_version() and get_allowed_mime_types_settings() read stored options. get_allowed_mime_types() maps those settings onto SUPPORTED_MIME_TYPES.
+When the stored database version is older than DB_VERSION, the file loads inc/upgrade.php and stops if upgrade fails.
+It then loads inc/init.php and registers the MIME filters. Those filters run on the front end and in wp-admin.
+Admin files load only after is_admin().
+
+
+Runtime (inc/)
+--------------
+index.php                       Direct-access guard
+init.php                        Pro_Mime_Types\Main. MIME registration, upload allow-list, ext2type, image/audio/video extensions, real filetype check, Media Library post MIME types
+admin.php                       Pro_Mime_Types\Admin. Settings menus, save handler, plugin action links. Includes the views
+upgrade.php                     Pro_Mime_Types\Upgrade. First-run registration and settings migration, with a short upgrade lock
+
+
+Admin views (views/)
+--------------------
+Loaded from inc/admin.php only. Namespace Pro_Mime_Types\Admin\Views.
+
+index.php                       Direct-access guard
+admin.php                       Settings page shell, tab navigation, and save notices
+tab-options.php                 Options tab. Form that allows or blocks each supported MIME type
+tab-allowed-types.php           Allowed Types tab. Read-only list of MIME types WordPress currently allows
+
+
+Assets (lib/)
+-------------
+admin.js                        Settings screen behavior
+admin.css                       Settings screen layout, including tooltips
+admin.min.js                    Minified mirror of admin.js. Do not edit
+admin.min.css                   Minified mirror of admin.css. Do not edit
+
+
+Translations (language/)
+------------------------
+pro-mime-types.pot              Gettext template
